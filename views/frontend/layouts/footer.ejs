@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quantum Healing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link href="/front-assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/front-assets/css/slick.css" />
+    <link rel="stylesheet" href="/front-assets/css/slick-theme.css" />
+    <link rel="stylesheet" href="/front-assets/css/style.css" />
+    <link rel="stylesheet" href="/front-assets/css/responsive.css" />
+  </head>
+  <body>
+    <footer class="ptb-90 footer pb-lg-4 pb-3">
+      <div class="container">
+        <div class="row gy-lg-4 gy-md-4 gy-sm-4 gy-2 footer-row">
+          <div class="footer-l">
+            <div class="footer-content">
+              <div class="footer-logo">
+                <a href="/">
+                  <!-- DYNAMIC LOGO FROM ImagesLogo MODEL -->
+                  <% if (typeof imagesLogo !== 'undefined' && imagesLogo && imagesLogo.logo) { %>
+                    <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
+                  <% } else { %>
+                    <img src="/front-assets/images/Quantum-log.svg" alt="Quantum Healing Logo" />
+                  <% } %>
+                </a>
+              </div>
+            </div>
+            <p class="mb-md-4 mb-3">
+              lorem ipsum lorem ipsummm lorem ipsum lorem ipsum lorem ipsummm
+            </p>
+            <ul class="social-media">
+              <li><a class="icon-box" href=""><i class="fa-brands fa-linkedin-in"></i></a></li>
+              <li><a class="icon-box" href=""><i class="fa-brands fa-twitter"></i></a></li>
+              <li><a class="icon-box" href=""><i class="fa-brands fa-instagram"></i></a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <div class="footer-menu">
+              <p>Find Us At</p>
+              <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about-us">About Us</a></li>
+                <li><a href="/services">Services</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/contact">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <div class="footer-menu">
+              <p>Our Experience</p>
+              <ul>
+                <li><a href="#">What do we do?</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Our Services</a></li>
+                <li><a href="#">Our Markers</a></li>
+                <li><a href="/appointment">Appointment</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <div class="footer-gallery">
+              <p>Our Gallery</p>
+              <div class="f-gallery mt-4">
+                <%
+                  let galleryImages = [];
+                  if (typeof imagesLogo !== 'undefined' && imagesLogo && imagesLogo.gallery_images && Array.isArray(imagesLogo.gallery_images) && imagesLogo.gallery_images.length > 0) {
+                    galleryImages = imagesLogo.gallery_images;
+                  }
+                %>
+
+                <% if (galleryImages.length > 0) { %>
+                  <% galleryImages.forEach((img) => { %>
+                    <div class="f-image">
+                      <a href="<%= img %>" data-toggle="lightbox">
+                        <img src="<%= img %>" alt="Gallery Image" />
+                      </a>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <!-- ORIGINAL STATIC GALLERY IMAGES (fallback) -->
+                  <div class="f-image">
+                    <a href="/front-assets/images/f-gallery.png" data-toggle="lightbox">
+                      <img src="/front-assets/images/f-gallery.png" alt="Gallery" />
+                    </a>
+                  </div>
+                  <div class="f-image">
+                    <a href="/front-assets/images/f-gallery2.png" data-toggle="lightbox">
+                      <img src="/front-assets/images/f-gallery2.png" alt="Gallery" />
+                    </a>
+                  </div>
+                  <div class="f-image">
+                    <a href="/front-assets/images/f-gallery3.png" data-toggle="lightbox">
+                      <img src="/front-assets/images/f-gallery3.png" alt="Gallery" />
+                    </a>
+                  </div>
+                  <div class="f-image">
+                    <a href="/front-assets/images/f-gallery4.png" data-toggle="lightbox">
+                      <img src="/front-assets/images/f-gallery4.png" alt="Gallery" />
+                    </a>
+                  </div>
+                  <div class="f-image">
+                    <a href="/front-assets/images/f-gallery5.png" data-toggle="lightbox">
+                      <img src="/front-assets/images/f-gallery5.png" alt="Gallery" />
+                    </a>
+                  </div>
+                  <div class="f-image">
+                    <a href="/front-assets/images/f-gallery6.png" data-toggle="lightbox">
+                      <img src="/front-assets/images/f-gallery6.png" alt="Gallery" />
+                    </a>
+                  </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row copyright mt-lg-5 mt-sm-4 mt-4">
+          <div class="col-lg-6 col-md-6 col-sm-12 text-lg-start text-md-start text-sm-center text-center">
+            <p>Quantum Healing 2021 All Rights Reserved</p>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 text-lg-end text-md-end text-sm-center text-center">
+            <p>Developed by Protocloud Technologies</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/front-assets/js/jquery-3.6.1.min.js"></script>
+    <script src="/front-assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.0/dist/index.bundle.min.js"></script>
+    <script src="/front-assets/js/slick.min.js"></script>
+    <script src="/front-assets/js/main.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        $(".banner-slide").slick({
+          dots: true,
+          arrows: true,
+          infinite: true,
+          autoplay: true,
+          autoplaySpeed: 4000,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        });
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        new Swiper(".testimonialSwiper", {
+          loop: true,
+          autoplay: { delay: 4000, disableOnInteraction: false },
+          slidesPerView: 1,
+          spaceBetween: 30,
+          pagination: { el: ".swiper-pagination", clickable: true },
+          navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+          breakpoints: { 768: { slidesPerView: 2 }, 992: { slidesPerView: 3 } }
+        });
+      });
+    </script>
+  </body>
+</html>

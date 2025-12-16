@@ -1,0 +1,79 @@
+<!-- views/admin/blogs/edit-blog.ejs -->
+<%- include("../layouts/header") %>
+<%- include("../layouts/sidebar") %>
+
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/blogs">Blogs</a></li>
+        <li class="breadcrumb-item active">Edit Blog</li>
+      </ol>
+    </div>
+
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success alert-dismissible fade show">
+        <%= success[0] %> <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <%= error[0] %> <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Edit Blog</h4>
+      </div>
+      <div class="card-body">
+        <!-- IMPORTANT: method="POST" + hidden _method field -->
+        <form action="/admin/blogs/<%= blog.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+          
+          <div class="mb-3">
+            <label class="form-label">Title <span class="text-danger">*</span></label>
+            <input type="text" name="title" class="form-control" value="<%= blog.title %>" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Author (optional)</label>
+            <input type="text" name="author" class="form-control" value="<%= blog.author || (user ? user.name : '') %>">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Tags (comma separated)</label>
+            <input type="text" name="tags" class="form-control" value="<%= tagsString %>" placeholder="tech, news, tutorial">
+          </div>
+
+          <% if (blog.image) { %>
+            <div class="mb-3">
+              <label class="form-label">Current Image</label><br>
+              <img src="/uploads/<%= blog.image %>" class="img-thumbnail" style="max-height:200px;">
+            </div>
+          <% } %>
+
+          <div class="mb-3">
+            <label class="form-label">Change Image</label>
+            <input type="file" name="image" class="form-control" accept="image/*">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Content <span class="text-danger">*</span></label>
+            <textarea name="content" id="content" required><%= blog.content %></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Update Blog</button>
+          <a href="/admin/blogs" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  CKEDITOR.replace('content');
+</script>
+
+<%- include("../layouts/footer") %>

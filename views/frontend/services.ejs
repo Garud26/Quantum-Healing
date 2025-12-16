@@ -1,0 +1,132 @@
+<%- include("./layouts/header.ejs") %>
+
+<!-- Inner Banner -->
+<section class="inner-banner">
+  <div class="container">
+    <div class="row align-items-center justify-content-around">
+      <div class="col-lg-6 col-md-6 col-12 text-lg-start text-md-start text-sm-center text-center mb-sm-3 mb-3">
+        <div class="inner-banner-heading">
+          <h1 class="mb-0">Services</h1>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-12 text-lg-end text-md-end text-sm-center text-center">
+        <div class="breadcrumbs">
+          <ul>
+            <li><a href="/">HOME</a></li>
+            <li><i class="fa-solid fa-chevron-right mx-2"></i></li>
+            <li><a href="/services" class="active">SERVICES</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Navigation -->
+<section class="services-lists ptb-65">
+  <div class="container">
+    <div class="row g-lg-4 g-md-4 g-3">
+      <div class="col-12">
+        <div class="heading mb-34">
+          <h3>How Can We Help You</h3>
+          <p class="size-20 mb-0">
+            Explore our professional wellness services designed just for you.
+          </p>
+        </div>
+      </div>
+
+      <% if (services && services.length > 0) { %>
+        <% services.forEach(function(service) { %>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-6">
+            <div class="services-list">
+              <a class="size-20 mb-0 text-decoration-none" href="#service-<%= service.id %>">
+                <%= service.title.toUpperCase() %>
+              </a>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="col-12 text-center py-5">
+          <p>No services available at this time.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- Dynamic Service Sections (Zig-Zag) -->
+<% if (services && services.length > 0) { %>
+  <% services.forEach(function(service, index) { %>
+    <% 
+      const isReverse = index % 2 === 1;
+
+      // CORRECT IMAGE PATH - This is the key fix!
+      const imagePath = service.image 
+        ? '/uploads/' + service.image 
+        : '/front-assets/images/default-service.jpg';
+
+      const paragraphs = service.description
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+    %>
+
+    <section class="zig-zag-section ptb-90" id="service-<%= service.id %>">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-12">
+            <div class="zig-zag-container d-flex flex-wrap align-items-center <%= isReverse ? 'flex-row-reverse' : '' %>">
+
+              <!-- Image (Left on even, Right on odd) -->
+              <div class="zig-zag-img mb-4 mb-lg-0">
+                <img 
+                  src="<%= imagePath %>" 
+                  alt="<%= service.title %>" 
+                  class="img-fluid rounded shadow-sm"
+                  style="max-height: 400px; object-fit: cover; width: 100%;">
+              </div>
+
+              <!-- Text Content -->
+              <div class="zig-zag-details ps-lg-5 pe-lg-5">
+                <h3 class="mb-4"><%= service.title %></h3>
+                <% paragraphs.forEach(function(para) { %>
+                  <p class="size-22 text-muted mb-3"><%= para %></p>
+                <% }) %>
+                <a href="/appointment" class="btn btn-primary blue-btn mt-3">
+                  Book Appointment
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% }) %>
+<% } else { %>
+  <section class="ptb-90">
+    <div class="container">
+      <div class="text-center">
+        <h4>No services found</h4>
+      </div>
+    </div>
+  </section>
+<% } %>
+
+<!-- Call to Action -->
+<section class="request-quote ptb-90 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <p class="size-20">Ready to Feel Better?</p>
+        <h2 class="mb-4">CHOOSE YOUR PATH TODAY</h2>
+        <ul class="btn-list justify-content-center">
+          <li><a class="btn btn-primary blue-btn mx-2" href="/appointment">BOOK APPOINTMENT</a></li>
+          <li><a class="btn btn-outline-primary mx-2" href="/contact">CONTACT US</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include("./layouts/footer.ejs") %>

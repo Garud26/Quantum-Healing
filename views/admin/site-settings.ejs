@@ -1,0 +1,81 @@
+<%- include("./layouts/header") %>
+<%- include("./layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Site Settings</h4>
+          </div>
+          <div class="card-body">
+            <% if (success.length > 0) { %>
+              <div class="alert alert-success"><%= success %></div>
+            <% } %>
+            <% if (error.length > 0) { %>
+              <div class="alert alert-danger"><%= error %></div>
+            <% } %>
+
+            <form action="/admin/site-settings" method="POST" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label>Site Name</label>
+                  <input type="text" name="site_name" class="form-control" value="<%= settings.site_name %>" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Site Logo</label>
+                  <input type="file" name="site_logo" class="form-control" accept="image/*">
+                  <% if (settings.site_logo) { %>
+                    <img src="/uploads/<%= settings.site_logo %>" width="100" class="mt-2 rounded">
+                  <% } %>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Header/Footer Code (Optional)</label>
+                  <textarea name="header_footer" class="form-control" rows="4"><%= settings.header_footer || '' %></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Site Email</label>
+                  <input type="email" name="site_email" class="form-control" value="<%= settings.site_email || '' %>">
+                </div>
+                <div class="col-12 mb-3">
+                  <label>Site Address</label>
+                  <textarea name="site_address" class="form-control" rows="3"><%= settings.site_address || '' %></textarea>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Contact Number</label>
+                  <input type="text" name="contact_no" class="form-control" value="<%= settings.contact_no || '' %>">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Instagram URL</label>
+                  <input type="url" name="site_insta_url" class="form-control" value="<%= settings.site_insta_url || '' %>">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Facebook URL</label>
+                  <input type="url" name="site_fb_url" class="form-control" value="<%= settings.site_fb_url || '' %>">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>LinkedIn URL</label>
+                  <input type="url" name="site_linkedin_url" class="form-control" value="<%= settings.site_linkedin_url || '' %>">
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>X (Twitter) URL</label>
+                  <input type="url" name="site_x_url" class="form-control" value="<%= settings.site_x_url || '' %>">
+                </div>
+                <div class="col-12 mb-3">
+                  <label>Footer Copyright Text</label>
+                  <input type="text" name="footer_copyright_text" class="form-control" value="<%= settings.footer_copyright_text || '' %>">
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Save Settings</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("./layouts/footer") %>

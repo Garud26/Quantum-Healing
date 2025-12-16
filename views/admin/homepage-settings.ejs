@@ -1,0 +1,170 @@
+<%- include("./layouts/header") %> <%- include("./layouts/sidebar") %>
+
+<!-- CKEditor 4 CDN -->
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
+        <li class="breadcrumb-item active">Homepage Settings</li>
+      </ol>
+    </div>
+
+    <% if (success && success.length) { %>
+    <div class="alert alert-success alert-dismissible fade show">
+      <%= success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <% } %> <% if (error && error.length) { %>
+    <div class="alert alert-danger alert-dismissible fade show">
+      <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <% } %>
+
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Homepage Sections Settings</h4>
+      </div>
+      <div class="card-body">
+        <form
+          id="homepageForm"
+          action="/admin/homepage-settings"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <% order.forEach((sec, i) => { const item = data[sec]; %>
+          <div class="border rounded p-4 mb-5" style="background: #f9f9fa">
+            <h5 class="text-primary fw-bold mb-4 text-capitalize">
+              <%= sec.replace(/-/g, ' ') %>
+            </h5>
+
+            <!-- Hidden field to keep track of section -->
+            <input type="hidden" name="section[<%= i %>]" value="<%= sec %>" />
+
+            <!-- VIDEO SECTIONS -->
+            <% if (sec === 'patient-treated' || sec === 'feature') { %>
+            <div class="mb-4">
+              <label class="form-label fw-bold"
+                >Video Embed URL <span class="text-danger">*</span></label
+              >
+              <input
+                type="url"
+                name="videoUrl[<%= i %>]"
+                class="form-control"
+                placeholder="https://www.youtube.com/embed/xyz123"
+                value="<%= item.mediaUrl || '' %>"
+                required
+              />
+              <small class="text-muted"
+                >Use <strong>embed</strong> URL (YouTube/Vimeo)</small
+              >
+            </div>
+
+            <% if (item.mediaUrl) { %>
+            <div class="mb-4">
+              <small class="text-muted fw-bold d-block mb-2"
+                >Current Video Preview:</small
+              >
+              <div
+                class="ratio ratio-16x9 border rounded shadow-sm overflow-hidden"
+              >
+                <iframe
+                  src="<%= item.mediaUrl %>"
+                  allowfullscreen
+                  class="rounded"
+                ></iframe>
+              </div>
+            </div>
+            <input
+              type="hidden"
+              name="currentMediaUrl[<%= i %>]"
+              value="<%= item.mediaUrl %>"
+            />
+            <% } %> <% } else { %>
+            <!-- IMAGE SECTIONS -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">Upload New Image</label>
+              <input
+                type="file"
+                name="media"
+                class="form-control"
+                accept="image/*"
+              />
+              <small class="text-muted"
+                >Leave empty to keep current image</small
+              >
+            </div>
+
+            <% if (item.mediaUrl) { %>
+            <div class="mb-4 p-3 bg-white rounded border">
+              <small class="text-muted fw-bold d-block mb-2"
+                >Current Image:</small
+              >
+              <img
+                src="<%= item.mediaUrl %>"
+                class="img-thumbnail"
+                style="max-height: 250px; object-fit: cover"
+                alt="Current"
+              />
+              <input
+                type="hidden"
+                name="currentMediaUrl[<%= i %>]"
+                value="<%= item.mediaUrl %>"
+              />
+            </div>
+            <% } %> <% } %>
+
+            <!-- CKEditor Content -->
+            <div class="mb-4">
+              <label class="form-label fw-bold"
+                >Content <span class="text-danger">*</span></label
+              >
+              <textarea
+                name="content[<%= i %>]"
+                class="ckeditor"
+                id="editor_<%= i %>"
+              >
+<%= item.content %></textarea
+              >
+            </div>
+          </div>
+          <% }) %>
+
+          <div class="text-center my-5">
+            <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+              Save All Sections
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CRITICAL: Sync CKEditor data before submit -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initialize all CKEditor instances
+    document.querySelectorAll(".ckeditor").forEach((textarea, index) => {
+      CKEDITOR.replace(textarea, {
+        height: 300,
+        removeButtons: "Cut,Copy,Paste,Undo,Redo,Anchor,Source,Maximize",
+        allowedContent: true, // Allow all HTML (useful for rich content)
+      });
+    });
+
+    // Sync all CKEditor data before form submission
+    const form = document.getElementById("homepageForm");
+    form.addEventListener("submit", function (e) {
+      // Update all CKEditor instances before submitting
+      for (const instance in CKEDITOR.instances) {
+        CKEDITOR.instances[instance].updateElement();
+      }
+    });
+  });
+</script>
+
+<%- include("./layouts/footer") %>

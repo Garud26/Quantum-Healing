@@ -1,0 +1,185 @@
+<%- include("./layouts/header.ejs") %>
+
+<!-- Flash Messages -->
+<div class="container my-4">
+  <% if (messages?.success) { %>
+    <div class="alert alert-success alert-dismissible fade show">
+      <i class="fas fa-check-circle me-2"></i><%= messages.success %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+  <% if (messages?.error) { %>
+    <div class="alert alert-danger alert-dismissible fade show">
+      <i class="fas fa-exclamation-triangle me-2"></i><%= messages.error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  <% } %>
+</div>
+
+<!-- inner-banner -->
+<section class="inner-banner">
+  <div class="container">
+    <div class="row align-items-center justify-content-around">
+      <div class="col-lg-6 col-md-6 col-12 text-lg-start text-md-start text-sm-center text-center mb-sm-3 mb-3">
+        <div class="inner-banner-heading">
+          <h1 class="mb-0">Contact</h1>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-6 col-6 text-lg-end text-md-end text-sm-center text-center">
+        <div class="breadcrumbs">
+          <ul>
+            <li><a href="/">HOME</a></li>
+            <li><a href="" class=""><i class="fa-solid fa-chevron-right"></i></a></li>
+            <li><a href="" class="active">CONTACT</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Info Section -->
+<section class="contact-sec ptb-90">
+  <div class="container">
+    <div class="row">
+      <!-- Location -->
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-lg-0 mt-md-4 mt-sm-4 mt-4">
+        <div class="contact-sec-box equal-height" style="min-height: 319px">
+          <div class="contact-imgs mb-lg-4 mb-md-4 mb-sm-3 mb-2">
+            <% if (contactSetting.location_image) { %>
+              <img src="/uploads/<%= contactSetting.location_image %>" alt="Location" />
+            <% } else { %>
+              <img src="/front-assets/images/map.svg" alt="map" />
+            <% } %>
+          </div>
+          <div class="contact-sec-content text-center">
+            <h6 class="mb-2 match">Our Location</h6>
+            <p>
+              <%= contactSetting.location_address ? contactSetting.location_address : 'SHOP 5D/5COTTONWOOD PL, OXENFORD. GOLD COAST' %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone -->
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-lg-0 mt-md-4 mt-sm-4 mt-4">
+        <div class="contact-sec-box equal-height" style="min-height: 319px">
+          <div class="contact-imgs mb-lg-4 mb-md-4 mb-sm-3 mb-2">
+            <% if (contactSetting.phone_image) { %>
+              <img src="/uploads/<%= contactSetting.phone_image %>" alt="Phone" />
+            <% } else { %>
+              <img src="/front-assets/images/call-calling.svg" alt="phone" />
+            <% } %>
+          </div>
+          <div class="contact-sec-content text-center">
+            <h6 class="mb-2 match">Our Phone Numbers</h6>
+            <% if (contactSetting.phone_number) { %>
+              <a href="tel:<%= contactSetting.phone_number.replace(/\s/g, '') %>">
+                <p>Mobile: <%= contactSetting.phone_number %></p>
+              </a>
+            <% } else { %>
+              <a href="tel:0402884465">
+                <p>Mobile: - 0402 88 44 65</p>
+              </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-lg-0 mt-md-4 mt-sm-4 mt-4">
+        <div class="contact-sec-box equal-height" style="min-height: 319px">
+          <div class="contact-imgs mb-lg-4 mb-md-4 mb-sm-3 mb-2">
+            <% if (contactSetting.email_image) { %>
+              <img src="/uploads/<%= contactSetting.email_image %>" alt="Email" />
+            <% } else { %>
+              <img src="/front-assets/images/sms-tracking.svg" alt="email" />
+            <% } %>
+          </div>
+          <div class="contact-sec-content text-center">
+            <h6 class="mb-2 match">Our Email</h6>
+            <% if (contactSetting.email) { %>
+              <a href="mailto:<%= contactSetting.email %>">
+                <p class="wrap"><%= contactSetting.email.toUpperCase() %></p>
+              </a>
+            <% } else { %>
+              <a href="mailto:QUANTUMHEALINGCHIROPRACTIC@GMAIL.COM">
+                <p class="wrap">QUANTUMHEALINGCHIROPRACTIC@GMAIL.COM</p>
+              </a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Map + Contact Form -->
+<section class="map-section ptb-90">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-12 mb-4">
+        <div class="map">
+          <% if (contactSetting.map_url) { %>
+            <iframe
+              src="<%= contactSetting.map_url %>"
+              width="100%"
+              class="equal-height d-block"
+              style="border: 0px; min-height: 722.763px"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          <% } else { %>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15377325.755033026!2d132.94255477037117!3d-19.787846626209017!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6bd5f0a385c747c9%3A0x3942572f4ab50248!2sSullivan%20Nicolaides%20Pathology%20Townsville%20-%20Kirwan%20-%207-9%20Thuringowa%20Drive!5e0!3m2!1sen!2sin!4v1662615200201!5m2!1sen!2sin"
+              width="100%"
+              class="equal-height d-block"
+              style="border: 0px; min-height: 722.763px"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+        <div class="equal-height" style="min-height: 722.763px">
+          <div class="map--content">
+            <h6 class="size-22 fw-bold">Send a Message</h6>
+            <p>
+              lorem ipsum lorem ipsum lorem ipsummm lorem ipsum lorem ipsum
+              lorem ipsummm lorem ipsum
+            </p>
+          </div>
+          <div class="map-form">
+            <form action="/contact" method="POST">
+              <div class="mb-md-4 mb-sm-3 mb-3">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required />
+              </div>
+              <div class="mb-md-4 mb-sm-3 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Your Email" required />
+              </div>
+              <div class="mb-md-4 mb-sm-3 mb-3">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" name="subject" class="form-control" id="subject" placeholder="Subject" required />
+              </div>
+              <div class="mb-md-4 mb-sm-3 mb-3">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" name="message" id="message" rows="3" placeholder="Message" required></textarea>
+              </div>
+              <div class="mb-md-4 mb-sm-3 mb-3">
+                <button type="submit" class="btn btn-primary blue-btn">Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include("./layouts/footer.ejs") %>

@@ -1,0 +1,149 @@
+<%- include("../layouts/header") %>
+<%- include("../layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><a href="javascript:void(0)">Blogs</a></li>
+        <li class="breadcrumb-item"><a href="javascript:void(0)">List</a</li>
+      </ol>
+    </div>
+
+    <!-- Alerts -->
+    <% if (success && success.length > 0) { %>
+      <div class="alert alert-success alert-dismissible fade show">
+        <%= success[0] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+      <div class="alert alert-danger alert-dismissible fade show">
+        <%= error[0] %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="card-title mb-0">All Blogs</h4>
+        <a href="/admin/blogs/add" class="btn btn-primary">
+          Add New Blog
+        </a>
+      </div>
+
+      <div class="card-body">
+        <% if (!blogs || blogs.length === 0) { %>
+          <div class="text-center py-5">
+            <p class="text-muted">No blogs found.</p>
+            <a href="/admin/blogs/add" class="btn btn-primary">Create First Blog</a>
+          </div>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 100px;">Image</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Tags</th>
+                  <th>Created At</th>
+                  <th style="width: 140px;">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% blogs.forEach(blog => { %>
+
+                  <% 
+                    // SAFE WAY: Ensure tags is always an array
+                    let tagsArray = [];
+                    if (blog.tags) {
+                      if (Array.isArray(blog.tags)) {
+                        tagsArray = blog.tags;
+                      } else if (typeof blog.tags === 'string') {
+                        try {
+                          tagsArray = JSON.parse(blog.tags);
+                          if (!Array.isArray(tagsArray)) tagsArray = [];
+                        } catch (e) {
+                          // If JSON parse fails (old comma string), split it
+                          tagsArray = blog.tags.split(',').map(t => t.trim()).filter(t => t);
+                        }
+                      }
+                    }
+                  %>
+
+                  <tr>
+                    <!-- Image -->
+                    <td>
+                      <% if (blog.image) { %>
+                        <img src="/uploads/<%= blog.image %>"
+                             alt="blog"
+                             class="rounded"
+                             style="width: 80px; height: 60px; object-fit: cover;">
+                      <% } else { %>
+                        <div class="bg-light border rounded d-flex align-items-center justify-content-center text-muted"
+                             style="width: 80px; height: 60px;">
+                          <small>No image</small>
+                        </div>
+                      <% } %>
+                    </td>
+
+                    <!-- Title -->
+                    <td><strong><%= blog.title %></strong></td>
+
+                    <!-- Author -->
+                    <td><%= blog.author || 'Anonymous' %></td>
+
+                    <!-- Tags - Now 100% Safe -->
+                    <td>
+                      <% if (tagsArray.length > 0) { %>
+                        <% tagsArray.forEach(tag => { %>
+                          <span class="badge bg-primary rounded-pill me-1 mb-1">
+                            <%= tag %>
+                          </span>
+                        <% }) %>
+                      <% } else { %>
+                        <span class="text-muted"><em>No tags</em></span>
+                      <% } %>
+                    </td>
+
+                    <!-- Date -->
+                    <td>
+                      <%= new Date(blog.created_at).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric'
+                      }) %>
+                    </td>
+
+                    <!-- Actions -->
+                    <td>
+                      <a href="/admin/blogs/edit/<%= blog.id %>"
+                         class="btn btn-sm btn-warning text-white me-1"
+                         title="Edit">
+                        Edit
+                      </a>
+
+                      <form action="/admin/blogs/<%= blog.id %>?_method=DELETE"
+                            method="POST"
+                            style="display: inline;"
+                            onsubmit="return confirm('Delete this blog permanently?');">
+                        <button type="submit"
+                                class="btn btn-sm btn-danger"
+                                title="Delete">
+                          Delete
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../layouts/footer") %>

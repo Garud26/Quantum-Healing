@@ -1,0 +1,44 @@
+<%- include("../layouts/header") %>
+<%- include("../layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Add New Banner</h4>
+          </div>
+          <div class="card-body">
+            <form action="/admin/banners/add" method="POST" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label>Title</label>
+                  <input type="text" name="title" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Subtitle (optional)</label>
+                  <input type="text" name="subtitle" class="form-control">
+                </div>
+                <div class="col-12 mb-3">
+                  <label>Banner Image</label>
+                  <input type="file" name="image" class="form-control" accept="image/*" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label>Order</label>
+                  <input type="number" name="order_no" class="form-control" value="0">
+                </div>
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Save Banner</button>
+                  <a href="/admin/banners" class="btn btn-secondary">Back</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../layouts/footer") %>

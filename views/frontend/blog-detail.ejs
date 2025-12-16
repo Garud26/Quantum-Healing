@@ -1,0 +1,146 @@
+<!-- views/frontend/blog-detail.ejs -->
+<%- include("./layouts/header.ejs") %>
+
+<!-- Inner Banner -->
+<section class="inner-banner">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 text-start">
+        <h1 class="mb-0"><%= blog.title %></h1>
+      </div>
+      <div class="col-lg-6 text-end">
+        <div class="breadcrumbs">
+          <ul>
+            <li><a href="/">HOME</a></li>
+            <li><i class="fa-solid fa-chevron-right mx-2"></i></li>
+            <li><a href="/blog">BLOG</a></li>
+            <li><i class="fa-solid fa-chevron-right mx-2"></i></li>
+            <li class="active">DETAIL</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Detail + Right Sidebar -->
+<section class="py-5">
+  <div class="container">
+    <div class="row">
+      <!-- Main Content (Left) -->
+      <div class="col-lg-8">
+        <!-- Blog Image -->
+        <% if (blog.image) { %>
+        <img
+          src="/uploads/<%= blog.image %>"
+          alt="<%= blog.title %>"
+          class="img-fluid rounded shadow-sm mb-4 w-100"
+          style="max-height: 500px; object-fit: cover"
+        />
+        <% } else { %>
+        <img
+          src="/front-assets/images/blog1.png"
+          alt="Blog Image"
+          class="img-fluid rounded shadow-sm mb-4 w-100"
+          style="max-height: 500px; object-fit: cover"
+        />
+        <% } %>
+
+        <!-- Meta Info -->
+        <div class="d-flex flex-wrap gap-4 text-muted small mb-4">
+          <span>
+            Calendar Icon <%= new
+            Date(blog.created_at).toLocaleDateString('en-US', { weekday: 'long',
+            year: 'numeric', month: 'long', day: 'numeric' }) %>
+          </span>
+          <% if (blog.author) { %>
+          <span>User Icon <%= blog.author %></span>
+          <% } %>
+        </div>
+
+        <!-- Blog Content -->
+        <div class="blog-content lh-lg fs-5 text-dark"><%- blog.content %></div>
+      </div>
+      <!-- End Main Content -->
+
+      <!-- Right Sidebar -->
+      <div class="col-lg-4">
+        <div class="sticky-top" style="top: 100px">
+          <!-- Tags Card -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">Tags</h5>
+            </div>
+            <div class="card-body">
+              <% let tagsArray = []; if (blog.tags) { if
+              (Array.isArray(blog.tags)) { tagsArray = blog.tags; } else if
+              (typeof blog.tags === 'string') { try { const parsed =
+              JSON.parse(blog.tags); tagsArray = Array.isArray(parsed) ? parsed
+              : []; } catch (e) { tagsArray = blog.tags.split(',').map(t =>
+              t.trim()).filter(t => t); } } } %> <% if (tagsArray.length > 0) {
+              %>
+              <div class="d-flex flex-wrap gap-2">
+                <% tagsArray.forEach(function(tag) { %>
+                <a
+                  href="/blog?tag=<%= encodeURIComponent(tag) %>"
+                  class="badge bg-light text-primary border border-primary px-3 py-2 text-decoration-none"
+                >
+                  #<%= tag %>
+                </a>
+                <% }) %>
+              </div>
+              <% } else { %>
+              <p class="text-muted mb-0">No tags</p>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Related Posts -->
+          <% if (relatedBlogs && relatedBlogs.length > 0) { %>
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bg-dark text-white">
+              <h5 class="mb-0">Related Posts</h5>
+            </div>
+            <div class="card-body p-0">
+              <% relatedBlogs.forEach(function(related) { %>
+              <a
+                href="/blog/<%= related.id %>"
+                class="text-decoration-none d-block p-3 border-bottom hover-bg-light"
+              >
+                <div class="d-flex align-items-center">
+                  <% if (related.image) { %>
+                  <img
+                    src="/uploads/<%= related.image %>"
+                    class="rounded me-3"
+                    style="width: 70px; height: 70px; object-fit: cover"
+                  />
+                  <% } else { %>
+                  <img
+                    src="/front-assets/images/blog1.png"
+                    class="rounded me-3"
+                    style="width: 70px; height: 70px; object-fit: cover"
+                  />
+                  <% } %>
+                  <div>
+                    <h6 class="mb-1 text-dark">
+                      <%= related.title.length > 50 ?
+                      related.title.substring(0,50)+'...' : related.title %>
+                    </h6>
+                    <small class="text-muted">
+                      <%= new Date(related.created_at).toLocaleDateString() %>
+                    </small>
+                  </div>
+                </div>
+              </a>
+              <% }) %>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+    </div>
+  </div>
+</section>
+
+<%- include("./layouts/footer.ejs") %>

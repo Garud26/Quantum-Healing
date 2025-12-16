@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title || 'Quantum Healing' %></title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+    />
+    <link href="/front-assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/front-assets/css/slick.css" />
+    <link rel="stylesheet" href="/front-assets/css/slick-theme.css" />
+    <link rel="stylesheet" href="/front-assets/css/style.css" />
+    <link rel="stylesheet" href="/front-assets/css/responsive.css" />
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <!-- DYNAMIC LOGO IN MAIN NAVBAR -->
+            <% if (typeof imagesLogo !== 'undefined' && imagesLogo && imagesLogo.logo) { %>
+              <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
+            <% } else { %>
+              <img src="/front-assets/images/Quantum-log.svg" alt="Quantum Healing Logo" />
+            <% } %>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="offcanvas offcanvas-start" id="navbarNavDropdown">
+            <div class="offcanvas-header">
+              <a href="/" class="offcanvas-title offcanvas-logo">
+                <!-- DYNAMIC LOGO IN MOBILE/OFFCANVAS MENU -->
+                <% if (typeof imagesLogo !== 'undefined' && imagesLogo && imagesLogo.logo) { %>
+                  <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
+                <% } else { %>
+                  <img src="/front-assets/images/Quantum-log.svg" alt="Quantum Healing Logo" />
+                <% } %>
+              </a>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Close"
+              ></button>
+            </div>
+
+            <div class="offcanvas-body">
+              <ul class="navbar-nav ms-lg-auto ms-md-3 ms-3">
+                <li class="nav-item">
+                  <a
+                    class="nav-link <%= path === '/' ? 'active' : '' %>"
+                    aria-current="<%= path === '/' ? 'page' : 'false' %>"
+                    href="/"
+                    >HOME</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link <%= path === '/about-us' ? 'active' : '' %>"
+                    href="/about-us"
+                    >ABOUT US</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link <%= path === '/services' ? 'active' : '' %>"
+                    href="/services"
+                    >SERVICES</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link <%= path === '/blog' ? 'active' : '' %>"
+                    href="/blog"
+                    >BLOG</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link <%= path === '/contact' ? 'active' : '' %>"
+                    href="/contact"
+                    >CONTACT</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    href="/appointment"
+                    class="btn btn-primary blue-btn ms-lg-4 mt-lg-0 mt-3 d-block d-lg-inline-block"
+                  >
+                    APPOINTMENT
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </body>
+</html>

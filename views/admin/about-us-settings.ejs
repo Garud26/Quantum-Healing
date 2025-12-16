@@ -1,0 +1,250 @@
+<%- include("./layouts/header") %>
+<%- include("./layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item active">About Us Settings</li>
+      </ol>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (messages?.success) { %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm">
+        <i class="fas fa-check-circle me-2"></i><%= messages.success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (messages?.error) { %>
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm">
+        <i class="fas fa-exclamation-triangle me-2"></i><%= messages.error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="card-title mb-0">
+              <i class="fas fa-edit me-2"></i> Edit About Us Page
+            </h4>
+          </div>
+          <div class="card-body p-4 p-lg-5">
+
+            <form action="/admin/about-us-settings" method="POST" enctype="multipart/form-data" id="aboutUsForm">
+
+              <!-- About Me Section -->
+              <div class="setting-section mb-5">
+                <h5 class="section-title mb-4 text-primary">
+                  <i class="fas fa-user-circle me-2"></i>About Me
+                </h5>
+                <div class="row g-4">
+                  <div class="col-lg-4">
+                    <label class="form-label fw-bold">Image</label>
+                    <input type="file" name="about_me_image" class="form-control" accept="image/*">
+                    <% if (setting.about_me_image) { %>
+                      <div class="mt-3 text-center">
+                        <img src="/uploads/<%= setting.about_me_image %>"
+                             class="img-thumbnail rounded shadow-sm"
+                             width="220" alt="About Me">
+                        <p class="text-muted small mt-2">Current Image</p>
+                      </div>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-8">
+                    <label class="form-label fw-bold">Content</label>
+                    <div id="about_me_editor" class="quill-modern"><%= setting.about_me_content || '' %></div>
+                    <textarea name="about_me_content" id="about_me_content_hidden" style="display:none;"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-5">
+
+              <!-- Who We Are Section -->
+              <div class="setting-section mb-5">
+                <h5 class="section-title mb-4 text-primary">
+                  <i class="fas fa-users me-2"></i>Who We Are
+                </h5>
+                <div class="row g-4">
+                  <div class="col-lg-4">
+                    <input type="file" name="who_we_are_image" class="form-control" accept="image/*">
+                    <% if (setting.who_we_are_image) { %>
+                      <div class="mt-3 text-center">
+                        <img src="/uploads/<%= setting.who_we_are_image %>"
+                             class="img-thumbnail rounded shadow-sm"
+                             width="220" alt="Who We Are">
+                        <p class="text-muted small mt-2">Current Image</p>
+                      </div>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-8">
+                    <div id="who_we_are_editor" class="quill-modern"><%= setting.who_we_are_content || '' %></div>
+                    <textarea name="who_we_are_content" id="who_we_are_content_hidden" style="display:none;"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-5">
+
+              <!-- Video URL Section -->
+              <div class="setting-section mb-5">
+                <h5 class="section-title mb-4 text-primary">
+                  <i class="fas fa-video me-2"></i>Video Embed URL
+                </h5>
+                <div class="col-lg-8">
+                  <input 
+                    type="url" 
+                    name="video_url" 
+                    class="form-control form-control-lg" 
+                    value="<%= setting.video_url || '' %>"
+                    placeholder="https://www.youtube.com/embed/abc123"
+                  >
+                  <div class="form-text">
+                    Use YouTube/Vimeo <strong>embed URL</strong> (not the share link)
+                  </div>
+                </div>
+              </div>
+
+              <hr class="my-5">
+
+              <!-- We Offer Section -->
+              <div class="setting-section mb-5">
+                <h5 class="section-title mb-4 text-primary">
+                  <i class="fas fa-gift me-2"></i>What We Offer
+                </h5>
+                <div class="row g-4">
+                  <div class="col-lg-4">
+                    <input type="file" name="we_offer_image" class="form-control" accept="image/*">
+                    <% if (setting.we_offer_image) { %>
+                      <div class="mt-3 text-center">
+                        <img src="/uploads/<%= setting.we_offer_image %>"
+                             class="img-thumbnail rounded shadow-sm"
+                             width="220" alt="We Offer">
+                        <p class="text-muted small mt-2">Current Image</p>
+                      </div>
+                    <% } %>
+                  </div>
+                  <div class="col-lg-8">
+                    <div id="we_offer_editor" class="quill-modern"><%= setting.we_offer_content || '' %></div>
+                    <textarea name="we_offer_content" id="we_offer_content_hidden" style="display:none;"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary btn-lg px-6 shadow-lg hover-lift">
+                  <i class="fas fa-save me-2"></i> Save All Changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Latest Quill Editor v2.0.2 -->
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
+<style>
+  .setting-section {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 5px solid #0d6efd;
+    transition: all 0.3s ease;
+  }
+  .setting-section:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+  .section-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  .quill-modern {
+    height: 300px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  .quill-modern .ql-container {
+    font-size: 1rem;
+    border: none !important;
+  }
+  .quill-modern .ql-toolbar {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background: #f1f3f5;
+    border-bottom: 2px solid #0d6efd !important;
+  }
+  .hover-lift {
+    transition: all 0.3s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(13, 110, 253, 0.3) !important;
+  }
+  .img-thumbnail {
+    transition: transform 0.3s ease;
+  }
+  .img-thumbnail:hover {
+    transform: scale(1.05);
+  }
+  @media (max-width: 768px) {
+    .setting-section {
+      padding: 1.5rem;
+    }
+    .quill-modern {
+      height: 250px;
+    }
+  }
+</style>
+
+<script>
+  // Initialize Quill Editors (Latest v2)
+  const quillEditors = {
+    about_me: new Quill('#about_me_editor', {
+      theme: 'snow',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['link', 'image'],
+          [{ 'align': [] }],
+          ['clean']
+        ]
+      },
+      placeholder: 'Write about yourself...'
+    }),
+    who_we_are: new Quill('#who_we_are_editor', {
+      theme: 'snow',
+      modules: { toolbar: true },
+      placeholder: 'Describe who we are...'
+    }),
+    we_offer: new Quill('#we_offer_editor', {
+      theme: 'snow',
+      modules: { toolbar: true },
+      placeholder: 'Explain what you offer...'
+    })
+  };
+
+  // Sync Quill content to hidden textarea on submit
+  document.getElementById('aboutUsForm').onsubmit = function() {
+    document.getElementById('about_me_content_hidden').value = quillEditors.about_me.root.innerHTML;
+    document.getElementById('who_we_are_content_hidden').value = quillEditors.who_we_are.root.innerHTML;
+    document.getElementById('we_offer_content_hidden').value = quillEditors.we_offer.root.innerHTML;
+  };
+</script>
+
+<%- include("./layouts/footer") %>

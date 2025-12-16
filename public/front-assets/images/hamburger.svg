@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="21" viewBox="0 0 25 21">
+  <defs>
+    <clipPath id="clip-hamburger">
+      <rect width="25" height="21"/>
+    </clipPath>
+  </defs>
+  <g id="hamburger" clip-path="url(#clip-hamburger)">
+    <path id="download" d="M4,7H26M4,15H26M4,23H26" transform="translate(-2.5 -4.5)" fill="#071d49" stroke="#071d49" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>

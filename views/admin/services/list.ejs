@@ -1,0 +1,46 @@
+<%- include("../layouts/header") %>
+<%- include("../layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <div class="col">
+        <h4>Services Management</h4>
+      </div>
+      <div class="col text-end">
+        <a href="/admin/services/add" class="btn btn-primary">+ Add Service</a>
+      </div>
+    </div>
+
+    <% if (success.length > 0) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <% if (error.length > 0) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <div class="row">
+      <% services.forEach(service => { %>
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <% if (service.image) { %>
+              <img src="/uploads/<%= service.image %>" class="card-img-top" style="height:180px; object-fit:cover;">
+            <% } %>
+            <div class="card-body">
+              <h5 class="card-title"><%= service.title %></h5>
+              <p class="card-text"><%= service.description.substring(0,100) %>...</p>
+              <div class="btn-group">
+                <a href="/admin/services/edit/<%= service.id %>" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/admin/services/delete/<%= service.id %>" 
+                   class="btn btn-sm btn-danger" 
+                   onclick="return confirm('Delete this service?')">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<%- include("../layouts/footer") %>

@@ -1,0 +1,235 @@
+<%- include("./layouts/header") %>
+<%- include("./layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item active">Appointment Requests</li>
+      </ol>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (messages?.success) { %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm">
+        <i class="fas fa-check-circle me-2"></i><%= messages.success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (messages?.error) { %>
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm">
+        <i class="fas fa-exclamation-triangle me-2"></i><%= messages.error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">
+              <i class="fas fa-calendar-check me-2"></i>
+              Appointment Requests (<%= appointments.length %>)
+            </h4>
+          </div>
+          <div class="card-body p-4">
+
+            <% if (appointments && appointments.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th width="15%">Name</th>
+                      <th width="18%">Email</th>
+                      <th width="12%">Phone</th>
+                      <th width="15%">Service</th>
+                      <th width="12%">Date</th>
+                      <th width="10%">Time</th>
+                      <th width="12%">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% appointments.forEach(appointment => { %>
+                      <tr>
+                        <td><strong><%= appointment.name %></strong></td>
+                        <td><a href="mailto:<%= appointment.email %>"><%= appointment.email %></a></td>
+                        <td><a href="tel:<%= appointment.phone %>"><%= appointment.phone %></a></td>
+                        <td><%= appointment.service %></td>
+                        <td><%= new Date(appointment.preferred_date).toLocaleDateString() %></td>
+                        <td><%= appointment.preferred_time.slice(0, 5) %></td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-info view-appointment me-1"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#appointmentModal"
+                                  data-name="<%= appointment.name %>"
+                                  data-email="<%= appointment.email %>"
+                                  data-phone="<%= appointment.phone %>"
+                                  data-service="<%= appointment.service %>"
+                                  data-date="<%= new Date(appointment.preferred_date).toLocaleDateString() %>"
+                                  data-time="<%= appointment.preferred_time.slice(0, 5) %>"
+                                  data-message="<%= appointment.message ? appointment.message.replace(/"/g, '&quot;') : '' %>"
+                                  data-submitted="<%= new Date(appointment.createdAt).toLocaleString() %>">
+                            <i class="fas fa-eye"></i>
+                          </button>
+
+                          <button class="btn btn-sm btn-warning edit-appointment me-1"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#editAppointmentModal"
+                                  data-id="<%= appointment.id %>"
+                                  data-name="<%= appointment.name %>"
+                                  data-email="<%= appointment.email %>"
+                                  data-phone="<%= appointment.phone %>"
+                                  data-service="<%= appointment.service %>"
+                                  data-date="<%= appointment.preferred_date %>"
+                                  data-time="<%= appointment.preferred_time %>"
+                                  data-message="<%= appointment.message ? appointment.message.replace(/"/g, '&quot;') : '' %>">
+                            <i class="fas fa-edit"></i>
+                          </button>
+
+                          <a href="/admin/appointments/delete/<%= appointment.id %>"
+                             class="btn btn-sm btn-danger"
+                             onclick="return confirm('Are you sure you want to delete this appointment request? This action cannot be undone.');">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            <% } else { %>
+              <div class="alert alert-info text-center py-5">
+                <i class="fas fa-calendar-times fa-3x mb-3 text-info"></i>
+                <h5>No appointment requests yet</h5>
+                <p class="text-muted">Appointment requests from visitors will appear here.</p>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Appointment Detail Modal (unchanged) -->
+<div class="modal fade" id="appointmentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i> Appointment Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row"><div class="col-md-6"><strong>Name:</strong></div><div class="col-md-6" id="modal-name"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Email:</strong></div><div class="col-md-6" id="modal-email"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Phone:</strong></div><div class="col-md-6" id="modal-phone"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Service:</strong></div><div class="col-md-6" id="modal-service"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Preferred Date:</strong></div><div class="col-md-6" id="modal-date"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Preferred Time:</strong></div><div class="col-md-6" id="modal-time"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Submitted On:</strong></div><div class="col-md-6" id="modal-submitted"></div></div><hr>
+
+        <div class="row" id="message-row" style="display: none;">
+          <div class="col-12"><strong>Additional Message:</strong></div>
+          <div class="col-12 mt-2 p-3 bg-light rounded" id="modal-message" style="white-space: pre-wrap;"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="#" id="modal-reply-email" class="btn btn-primary me-2">Reply via Email</a>
+        <a href="#" id="modal-call" class="btn btn-success">Call Now</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW: Edit Appointment Modal -->
+<div class="modal fade" id="editAppointmentModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title"><i class="fas fa-edit me-2"></i> Edit Appointment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <form action="" method="POST" id="editForm">
+        <div class="modal-body">
+          <input type="hidden" name="id" id="edit-id">
+          <div class="row mb-3">
+            <div class="col-md-6"><label class="form-label"><strong>Name</strong></label><input type="text" class="form-control" name="name" id="edit-name" required></div>
+            <div class="col-md-6"><label class="form-label"><strong>Email</strong></label><input type="email" class="form-control" name="email" id="edit-email" required></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><label class="form-label"><strong>Phone</strong></label><input type="text" class="form-control" name="phone" id="edit-phone" required></div>
+            <div class="col-md-6"><label class="form-label"><strong>Service</strong></label><input type="text" class="form-control" name="service" id="edit-service" required></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6"><label class="form-label"><strong>Preferred Date</strong></label><input type="date" class="form-control" name="preferred_date" id="edit-date" required></div>
+            <div class="col-md-6"><label class="form-label"><strong>Preferred Time</strong></label><input type="time" class="form-control" name="preferred_time" id="edit-time" required></div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label"><strong>Additional Message</strong></label>
+            <textarea class="form-control" name="message" id="edit-message" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-warning">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table th { font-weight: 600; }
+  .view-appointment, .edit-appointment { padding: 0.35rem 0.5rem; }
+  #modal-message { min-height: 80px; }
+</style>
+
+<script>
+  // View modal script (unchanged)
+  document.querySelectorAll('.view-appointment').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.getElementById('modal-name').textContent = this.dataset.name;
+      document.getElementById('modal-email').innerHTML = `<a href="mailto:${this.dataset.email}">${this.dataset.email}</a>`;
+      document.getElementById('modal-phone').innerHTML = `<a href="tel:${this.dataset.phone}">${this.dataset.phone}</a>`;
+      document.getElementById('modal-service').textContent = this.dataset.service;
+      document.getElementById('modal-date').textContent = this.dataset.date;
+      document.getElementById('modal-time').textContent = this.dataset.time;
+      document.getElementById('modal-submitted').textContent = this.dataset.submitted;
+
+      const messageRow = document.getElementById('message-row');
+      const messageEl = document.getElementById('modal-message');
+
+      if (this.dataset.message && this.dataset.message.trim() !== '') {
+        messageEl.textContent = this.dataset.message;
+        messageRow.style.display = 'block';
+      } else {
+        messageRow.style.display = 'none';
+      }
+
+      document.getElementById('modal-reply-email').href = 
+        `mailto:${this.dataset.email}?subject=Regarding Your Appointment Request - ${encodeURIComponent(this.dataset.service)}`;
+      document.getElementById('modal-call').href = `tel:${this.dataset.phone}`;
+    });
+  });
+
+  // NEW: Edit modal script
+  document.querySelectorAll('.edit-appointment').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.getElementById('edit-id').value = this.dataset.id;
+      document.getElementById('edit-name').value = this.dataset.name;
+      document.getElementById('edit-email').value = this.dataset.email;
+      document.getElementById('edit-phone').value = this.dataset.phone;
+      document.getElementById('edit-service').value = this.dataset.service;
+      document.getElementById('edit-date').value = this.dataset.date;
+      document.getElementById('edit-time').value = this.dataset.time;
+      document.getElementById('edit-message').value = this.dataset.message || '';
+
+      document.getElementById('editForm').action = `/admin/appointments/edit/${this.dataset.id}`;
+    });
+  });
+</script>
+
+<%- include("./layouts/footer") %>

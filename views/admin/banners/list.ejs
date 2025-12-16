@@ -1,0 +1,50 @@
+<%- include("../layouts/header") %>
+<%- include("../layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <div class="col">
+        <h4>Banners Management</h4>
+      </div>
+      <div class="col text-end">
+        <a href="/admin/banners/add" class="btn btn-primary">+ Add Banner</a>
+      </div>
+    </div>
+
+    <% if (success.length > 0) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <% if (error.length > 0) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <div class="row">
+      <% banners.forEach(banner => { %>
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <% if (banner.image) { %>
+              <img src="/uploads/<%= banner.image %>" class="card-img-top" style="height:200px; object-fit:cover;">
+            <% } else { %>
+              <div class="bg-light text-center py-5">No Image</div>
+            <% } %>
+            <div class="card-body">
+              <h5 class="card-title"><%= banner.title %></h5>
+              <% if (banner.subtitle) { %>
+                <p class="card-text text-muted"><%= banner.subtitle %></p>
+              <% } %>
+              <div class="btn-group">
+                <a href="/admin/banners/edit/<%= banner.id %>" class="btn btn-sm btn-warning">Edit</a>
+                <a href="/admin/banners/delete/<%= banner.id %>"
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('Delete this banner?')">Delete</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+<%- include("../layouts/footer") %>

@@ -1,0 +1,87 @@
+<%- include("./layouts/header.ejs") %>
+<% title = 'Book an Appointment' %>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Book Your Appointment</h1>
+    <p class="lead">Schedule a consultation with our expert doctors at your convenience.</p>
+  </div>
+</section>
+
+<!-- Appointment Form Section -->
+<section class="form-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-lg border-0 rounded-4">
+          <div class="card-body p-5">
+            <h3 class="text-center mb-5 fw-semibold">Appointment Request Form</h3>
+
+            <form action="/appointment" method="POST" novalidate>
+              <div class="row g-4">
+                <div class="col-md-6">
+                  <label for="name" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-lg" id="name" name="name" 
+                         value="<%= locals.old ? old.name : '' %>" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="email" class="form-label fw-medium">Email Address <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control form-control-lg" id="email" name="email" 
+                         value="<%= locals.old ? old.email : '' %>" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="phone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control form-control-lg" id="phone" name="phone" 
+                         value="<%= locals.old ? old.phone : '' %>" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="service" class="form-label fw-medium">Service Required <span class="text-danger">*</span></label>
+                  <select class="form-select form-select-lg" id="service" name="service" required>
+                    <option value="" disabled <%= !locals.old || !old.service ? 'selected' : '' %>>Choose a service</option>
+                    <option value="General Checkup" <%= locals.old && old.service === 'General Checkup' ? 'selected' : '' %>>General Checkup</option>
+                    <option value="Dental Care" <%= locals.old && old.service === 'Dental Care' ? 'selected' : '' %>>Dental Care</option>
+                    <option value="Cardiology" <%= locals.old && old.service === 'Cardiology' ? 'selected' : '' %>>Cardiology</option>
+                    <option value="Pediatrics" <%= locals.old && old.service === 'Pediatrics' ? 'selected' : '' %>>Pediatrics</option>
+                    <option value="Dermatology" <%= locals.old && old.service === 'Dermatology' ? 'selected' : '' %>>Dermatology</option>
+                    <option value="Orthopedics" <%= locals.old && old.service === 'Orthopedics' ? 'selected' : '' %>>Orthopedics</option>
+                    <option value="Other" <%= locals.old && old.service === 'Other' ? 'selected' : '' %>>Other</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="preferred_date" class="form-label fw-medium">Preferred Date <span class="text-danger">*</span></label>
+                  <input type="date" class="form-control form-control-lg" id="preferred_date" name="preferred_date"
+                         min="<%= new Date().toISOString().split('T')[0] %>"
+                         value="<%= locals.old ? old.preferred_date : '' %>" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="preferred_time" class="form-label fw-medium">Preferred Time <span class="text-danger">*</span></label>
+                  <input type="time" class="form-control form-control-lg" id="preferred_time" name="preferred_time"
+                         value="<%= locals.old ? old.preferred_time : '' %>" required>
+                </div>
+
+                <div class="col-12">
+                  <label for="message" class="form-label fw-medium">Additional Message (Optional)</label>
+                  <textarea class="form-control" id="message" name="message" rows="5" placeholder="Any symptoms, special requests, etc."><%= locals.old ? old.message : '' %></textarea>
+                </div>
+
+                <div class="col-12 text-center mt-5">
+                  <button type="submit" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow">
+                    Request Appointment
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include("./layouts/footer.ejs") %>

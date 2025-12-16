@@ -1,0 +1,141 @@
+<%- include("./layouts/header") %>
+<%- include("./layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/admin/contact-settings">Contact Settings</a></li>
+        <li class="breadcrumb-item active">Contact Form Messages</li>
+      </ol>
+    </div>
+
+    <!-- Flash Messages -->
+    <% if (messages?.success) { %>
+      <div class="alert alert-success alert-dismissible fade show shadow-sm">
+        <i class="fas fa-check-circle me-2"></i><%= messages.success %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+    <% if (messages?.error) { %>
+      <div class="alert alert-danger alert-dismissible fade show shadow-sm">
+        <i class="fas fa-exclamation-triangle me-2"></i><%= messages.error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="card-title mb-0">
+              <i class="fas fa-envelope-open-text me-2"></i>
+              Contact Form Messages (<%= forms.length %>)
+            </h4>
+            <a href="/admin/contact-settings" class="btn btn-light btn-sm">
+              <i class="fas fa-cog me-1"></i> Back to Contact Settings
+            </a>
+          </div>
+          <div class="card-body p-4">
+
+            <% if (forms && forms.length > 0) { %>
+              <div class="table-responsive">
+                <table class="table table-hover table-bordered align-middle">
+                  <thead class="table-light">
+                    <tr>
+                      <th width="15%">Name</th>
+                      <th width="18%">Email</th>
+                      <th width="15%">Subject</th>
+                      <th width="35%">Message</th>
+                      <th width="12%">Date</th>
+                      <th width="5%">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% forms.forEach(form => { %>
+                      <tr>
+                        <td><strong><%= form.name %></strong></td>
+                        <td>
+                          <a href="mailto:<%= form.email %>"><%= form.email %></a>
+                        </td>
+                        <td><%= form.subject || '<em>No subject</em>' %></td>
+                        <td class="text-truncate" style="max-width: 300px;" title="<%= form.message %>">
+                          <%= form.message.length > 100 ? form.message.substring(0, 100) + '...' : form.message %>
+                        </td>
+                        <td><%= new Date(form.createdAt).toLocaleString() %></td>
+                        <td class="text-center">
+                          <button class="btn btn-sm btn-info view-message" 
+                                  data-bs-toggle="modal" 
+                                  data-bs-target="#messageModal"
+                                  data-name="<%= form.name %>"
+                                  data-email="<%= form.email %>"
+                                  data-subject="<%= form.subject || 'No subject' %>"
+                                  data-message="<%= form.message.replace(/"/g, '&quot;') %>"
+                                  data-date="<%= new Date(form.createdAt).toLocaleString() %>">
+                            <i class="fas fa-eye"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            <% } else { %>
+              <div class="alert alert-info text-center py-5">
+                <i class="fas fa-info-circle fa-3x mb-3 text-info"></i>
+                <h5>No messages yet</h5>
+                <p class="text-muted">When visitors submit the contact form, their messages will appear here.</p>
+              </div>
+            <% } %>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Message Detail Modal -->
+<div class="modal fade" id="messageModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-envelope me-2"></i> Message Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row"><div class="col-md-6"><strong>Name:</strong></div><div class="col-md-6" id="modal-name"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Email:</strong></div><div class="col-md-6" id="modal-email"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Subject:</strong></div><div class="col-md-6" id="modal-subject"></div></div><hr>
+        <div class="row"><div class="col-md-6"><strong>Received:</strong></div><div class="col-md-6" id="modal-date"></div></div><hr>
+        <div class="row"><div class="col-12"><strong>Message:</strong></div><div class="col-12 mt-2 p-3 bg-light rounded" id="modal-message" style="white-space: pre-wrap;"></div></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a href="#" id="modal-reply" class="btn btn-primary">Reply via Email</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table th { font-weight: 600; }
+  .view-message { padding: 0.35rem 0.5rem; }
+  #modal-message { min-height: 100px; }
+</style>
+
+<script>
+  document.querySelectorAll('.view-message').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.getElementById('modal-name').textContent = this.dataset.name;
+      document.getElementById('modal-email').innerHTML = `<a href="mailto:${this.dataset.email}">${this.dataset.email}</a>`;
+      document.getElementById('modal-subject').textContent = this.dataset.subject;
+      document.getElementById('modal-date').textContent = this.dataset.date;
+      document.getElementById('modal-message').textContent = this.dataset.message;
+      document.getElementById('modal-reply').href = `mailto:${this.dataset.email}?subject=Re: ${encodeURIComponent(this.dataset.subject)}`;
+    });
+  });
+</script>
+
+<%- include("./layouts/footer") %>

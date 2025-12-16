@@ -1,0 +1,221 @@
+<%- include("layouts/header") %> <%- include("layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+          <a href="javascript:void(0)">App</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="javascript:void(0)">Profile</a>
+        </li>
+      </ol>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col-lg-12">
+        <div class="profile card card-body px-3 pt-3 pb-0">
+          <div class="profile-head">
+            <div class="profile-info">
+              <div class="profile-photo">
+                <% if (user.Profile_img) { %>
+                <div class="mb-3 col-md-6">
+                  <img src="/uploads/<%= user.Profile_img %>" width="80" />
+                </div>
+                <% }else{ %>
+                <img
+                  src="/images/profile/profile.png"
+                  class="img-fluid rounded-circle"
+                  alt=""
+                />
+                <% } %>
+              </div>
+              <div class="profile-details">
+                <div class="profile-name px-3 pt-2">
+                  <h4 class="text-primary mb-0">
+                    <%= user ? user.name : 'Admin User' %>
+                  </h4>
+                  <p><%= user ? user.role : 'admin----' %></p>
+                </div>
+                <div class="profile-email px-2 pt-2">
+                  <h4 class="text-muted mb-0">
+                    <%= user ? user.email : 'admin@example.com' %>
+                  </h4>
+                  <p>Email</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3">
+            <div class="settings-form">
+              <h4 class="text-primary">Admin Account</h4>
+
+              <!-- Flash Messages -->
+              <% if (locals.flash && flash.error && flash.error.length > 0) { %>
+              <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Error:</strong> <%= flash.error[0] %>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                ></button>
+              </div>
+              <% } %> <% if (locals.flash && flash.success &&
+              flash.success.length > 0) { %>
+              <div class="alert alert-success alert-dismissible fade show">
+                <%= flash.success[0] %>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                ></button>
+              </div>
+              <% } %>
+
+              <form
+                id="registerForm"
+                action="/admin/update"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                <div class="row">
+                  <div class="mb-3 col-md-6">
+                    <label class="form-label"
+                      >Name <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control"
+                      placeholder="Enter name"
+                      required
+                      value="<%= user.name %>"
+                    />
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="form-label"
+                      >Email <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="email"
+                      name="email"
+                      class="form-control"
+                      placeholder="Enter email"
+                      required
+                      value="<%= user.email %>"
+                    />
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="form-label"
+                      >Password <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="form-control"
+                      placeholder="Enter password"
+                    />
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <label class="form-label"
+                      >Confirm Password
+                      <span class="text-danger">*</span></label
+                    >
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirm_password"
+                      class="form-control"
+                      placeholder="Confirm password"
+                    />
+                    <!-- Real-time error message -->
+                    <small
+                      id="passwordError"
+                      class="text-danger"
+                      style="display: none"
+                    >
+                      Passwords do not match! Please enter the same password.
+                    </small>
+                  </div>
+
+                  <div class="row">
+                    <div class="mb-3 col-md-6">
+                      <label class="form-label">Profile Image</label>
+                      <input
+                        type="file"
+                        placeholder="Profile Image"
+                        name="profile_image"
+                        class="form-control"
+                      />
+                    </div>
+                    <div class="mb-3 col-md-6">
+                      <label class="form-label">Role</label>
+                      <input
+                        type="text"
+                        placeholder="Role"
+                        name="role"
+                        class="form-control"
+                        value="<%= user.role %>"
+                        readonly
+                      />
+                    </div>
+
+                    <% if (user.Profile_img) { %>
+                    <div class="mb-3 col-md-6">
+                      <img src="/uploads/<%= user.Profile_img %>" width="80" />
+                    </div>
+                    <% } %>
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-3">
+                  Save Admin Account
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Client-side Password Match Validation Script -->
+<script>
+  const form = document.getElementById("registerForm");
+  const password = document.getElementById("password");
+  const confirmPassword = document.getElementById("confirmPassword");
+  const passwordError = document.getElementById("passwordError");
+
+  form.addEventListener("submit", function (e) {
+    if (password.value !== confirmPassword.value) {
+      e.preventDefault(); // Stop form submission
+      passwordError.style.display = "block";
+      confirmPassword.classList.add("is-invalid");
+      password.classList.add("is-invalid");
+    } else {
+      passwordError.style.display = "none";
+      confirmPassword.classList.remove("is-invalid");
+      password.classList.remove("is-invalid");
+    }
+  });
+
+  // Optional: Live check while typing
+  confirmPassword.addEventListener("input", function () {
+    if (password.value && password.value !== confirmPassword.value) {
+      passwordError.style.display = "block";
+      confirmPassword.classList.add("is-invalid");
+    } else {
+      passwordError.style.display = "none";
+      confirmPassword.classList.remove("is-invalid");
+    }
+  });
+</script>
+
+<%- include("layouts/footer") %>

@@ -1,0 +1,187 @@
+<%- include("./layouts/header") %>
+<%- include("./layouts/sidebar") %>
+<!-- Enhanced wrapper for perfect SB Admin 2 compatibility and no overlap -->
+<div id="content-wrapper" class="d-flex flex-column">
+  <div id="content">
+    <!-- Main page content -->
+    <div class="container-fluid pt-4">
+      <h1 class="h3 mb-4 text-gray-800">Images & Logo Settings</h1>
+      <!-- Flash Messages -->
+      <% if (typeof messages !== 'undefined') { %>
+        <% if (messages.success) { %>
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= messages.success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <% } %>
+        <% if (messages.error) { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= messages.error %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <% } %>
+      <% } %>
+      <form action="/admin/images-logo" method="POST" enctype="multipart/form-data">
+        <!-- Site Logo Card -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Site Logo (1 image)</h6>
+          </div>
+          <div class="card-body text-center">
+            <% if (record && record.logo) { %>
+              <img src="<%= record.logo %>" alt="Current Logo" class="img-fluid rounded border mb-3" style="max-height: 200px;">
+              <p class="text-muted small">Current logo</p>
+            <% } else { %>
+              <div class="bg-light rounded d-flex align-items-center justify-content-center mb-3 border" style="height: 200px;">
+                <em class="text-muted">No logo uploaded</em>
+              </div>
+            <% } %>
+            <label for="logo" class="form-label d-block mt-3">Upload New Logo</label>
+            <input type="file" name="logo" id="logo" class="form-control w-75 mx-auto" accept="image/*">
+            <small class="form-text text-muted">Recommended: 200x60px. Leave empty to keep current logo.</small>
+          </div>
+        </div>
+
+        <!-- Gallery Images Card -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Gallery Images (up to 6)</h6>
+          </div>
+          <div class="card-body">
+            <!-- Current Gallery Images Preview -->
+            <% if (record && record.gallery_images && record.gallery_images.length > 0) { %>
+              <div class="row mb-4">
+                <% record.gallery_images.forEach((img, index) => { %>
+                  <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card border h-100 shadow-sm">
+                      <div class="card-body text-center p-3">
+                        <img src="<%= img %>" alt="Gallery <%= index + 1 %>" class="img-fluid rounded border" style="max-height: 180px; object-fit: cover;">
+                        <p class="text-muted small mt-2">Image <%= index + 1 %></p>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+              <hr>
+              <p class="text-muted"><strong>Current images (<%= record.gallery_images.length %>)</strong></p>
+            <% } else { %>
+              <div class="alert alert-info text-center py-4 mb-4">
+                <em>No gallery images uploaded yet.</em>
+              </div>
+            <% } %>
+
+            <!-- Upload New/Replacement Images -->
+            <label for="gallery_images" class="form-label">Upload New Gallery Images (replace all)</label>
+            <input 
+              type="file" 
+              name="gallery_images" 
+              id="gallery_images" 
+              class="form-control" 
+              accept="image/*" 
+              multiple 
+              max="6">
+            <small class="form-text text-muted">
+              Select up to 6 images. Recommended: 800x600px.<br>
+              <strong>Uploading new images will replace all current gallery images.</strong>
+            </small>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-right mb-5">
+          <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+            <i class="fas fa-save mr-2"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- End of #content -->
+</div>
+<!-- End of #content-wrapper -->
+<%- include("./layouts/footer") %>
+
+<style>
+  body {
+    position: relative;
+  }
+  #wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+  }
+  #content-wrapper {
+    width: auto;
+    background-color: #f8f9fc;
+  }
+  #content {
+    width: auto;
+  }
+  @media (min-width: 768px) {
+    body:not(.sidebar-toggled) #content-wrapper,
+    body:not(.sidebar-toggled) #content {
+      margin-left: 14rem !important;
+    }
+    body.sidebar-toggled #content-wrapper,
+    body.sidebar-toggled #content {
+      margin-left: 6.5rem !important;
+    }
+    .container-fluid {
+      padding-left: 3rem !important;
+      padding-right: 3rem !important;
+    }
+  }
+  @media (max-width: 767.98px) {
+    #content-wrapper,
+    #content {
+      margin-left: 0 !important;
+    }
+    .container-fluid {
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+    }
+  }
+  #content-wrapper,
+  #content {
+    box-sizing: border-box;
+  }
+
+  /* Visual enhancements */
+  .card.shadow-sm {
+    transition: box-shadow 0.3s ease;
+  }
+  .card.shadow-sm:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  }
+  .btn-primary.shadow {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  }
+  .btn-primary.shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2) !important;
+  }
+  .card-body img {
+    max-width: 100%;
+    height: auto;
+  }
+  .text-right {
+    text-align: right !important;
+  }
+  .card-body {
+    padding: 1.75rem !important;
+  }
+  @media (min-width: 768px) {
+    .text-right.mb-5 {
+      margin-right: 1.5rem !important;
+    }
+  }
+  .row > .col-lg-4,
+  .row > .col-md-6 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+</style>

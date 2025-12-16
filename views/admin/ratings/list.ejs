@@ -1,0 +1,64 @@
+<%- include("../layouts/header") %>
+<%- include("../layouts/sidebar") %>
+
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row page-titles">
+      <h3>Ratings & Reviews</h3>
+    </div>
+
+    <% if(success){ %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <% if(error){ %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <a href="/admin/ratings/add" class="btn btn-primary mb-3">Add New Rating</a>
+
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Rating</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% ratings.forEach((r, i) => { %>
+              <tr>
+                <td><%= i + 1 %></td>
+                <td><%= r.name %></td>
+                <td><%= r.email %></td>
+                <td>
+                  <% for(let i=1; i<=5; i++) { %>
+                    <i class="fas fa-star <%= i <= r.rating ? 'text-warning' : 'text-muted' %>"></i>
+                  <% } %>
+                  (<%= r.rating %>)
+                </td>
+                <td><%= r.message ? r.message.substring(0, 60) + '...' : '-' %></td>
+                <td><%= new Date(r.createdAt).toLocaleDateString() %></td>
+                <td>
+                  <a href="/admin/ratings/edit/<%= r.id %>" class="btn btn-sm btn-info">Edit</a>
+                  <a href="/admin/ratings/delete/<%= r.id %>" 
+                     class="btn btn-sm btn-danger" 
+                     onclick="return confirm('Delete this rating?')">Delete</a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include("../layouts/footer") %>
