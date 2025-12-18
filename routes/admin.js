@@ -78,10 +78,14 @@ router.delete("/services/:id", serviceController.delete);
 // ==================== RATINGS ROUTES ====================
 router.get("/ratings", ratingController.list);
 router.get("/ratings/add", ratingController.addPage);
-router.post("/ratings/add", ratingController.add);
+
+router.post("/ratings/add", upload.single("image"), ratingController.add);
 
 router.get("/ratings/edit/:id", ratingController.editPage);
-router.post("/ratings/edit/:id", ratingController.update);
+
+router.post("/ratings/edit/:id", upload.single("image"), ratingController.update);
+
+router.put("/ratings/:id", upload.single("image"), ratingController.update);
 
 router.get("/ratings/delete/:id", ratingController.delete);
 router.delete("/ratings/:id", ratingController.delete);

@@ -1,8 +1,5 @@
 <%- include("./layouts/header.ejs") %>
 
-<!-- =======================
-      INLINE STYLING (VIDEO)
-=========================== -->
 <style>
   .video-wrapper {
     position: relative;
@@ -26,7 +23,7 @@
     font-size: 32px;
     cursor: pointer;
     transition: 0.3s;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   }
 
   .video-play-button:hover {
@@ -36,15 +33,17 @@
   .video-lightbox {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 9999;
   }
 
   .video-backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
   }
 
   .video-content-box {
@@ -72,17 +71,9 @@
     z-index: 20;
   }
 
-  /* ==========================
-      FEATURE VIDEO UPDATED
-  =========================== */
-  .video-wrapper.feature-video {
-    height: 350px;
-  }
-
-  
   .offer-section {
     padding: 90px 0;
-    background: #c7e9e2; 
+    background: #c7e9e2;
   }
 
   .offer-box {
@@ -92,8 +83,8 @@
     overflow: hidden;
     max-width: 1150px;
     margin: auto;
-    background: #071a42; /* deep navy */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.18);
+    background: #071a42;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
   }
 
   .offer-img img {
@@ -113,27 +104,29 @@
     color: #fff !important;
   }
 
-
   .offer-content p {
     color: #dce7ff;
     font-size: 18px;
   }
-
+  .testimonial-content img {
+  width: 120px;          
+  height: 120px;         
+  border-radius: 50%;   
+  object-fit: cover;     
+  border: 1px solid #dce7ff !important; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+  margin-bottom: 20px;   
+}
 </style>
 
-<!-- =======================
-      BANNER SECTION
-=========================== -->
+<!-- BANNER SECTION -->
 <section class="banner">
   <div class="container h-100">
     <div class="banner-slide">
-
       <% if (banners && banners.length > 0) { %>
         <% banners.forEach(b => { %>
-
           <div class="banner-slider">
             <div class="row align-items-center h-100">
-              
               <div class="col-lg-6">
                 <div class="banner-content">
                   <h1><%= b.title %></h1>
@@ -143,37 +136,27 @@
                   <a class="btn btn-primary blue-btn" href="/appointment">Book Now</a>
                 </div>
               </div>
-
               <div class="col-lg-6 text-center">
-                <img 
-                  src="<%= b.image ? '/uploads/' + b.image : '/front-assets/images/banner1.svg' %>" 
+                <img
+                  src="<%= b.image ? '/uploads/' + b.image : '/front-assets/images/banner1.svg' %>"
                   class="img-fluid"
                   alt="<%= b.title %>"
                 />
               </div>
-
             </div>
           </div>
-
         <% }) %>
-
       <% } %>
-
     </div>
   </div>
 </section>
 
-<!-- =======================
-  PATIENT TREATED VIDEO
-=========================== -->
+<!-- PATIENT TREATED VIDEO -->
 <section class="video-section ptb-90">
   <div class="container">
-
     <div class="row align-items-center">
-
       <div class="col-lg-6">
         <div class="video-wrapper shadow">
-
           <div class="video-play-button" id="openVideo1">
             <i class="fa fa-play"></i>
           </div>
@@ -182,30 +165,24 @@
             <div class="video-backdrop"></div>
             <div class="video-content-box">
               <i id="closeVideo1" class="fa fa-times video-close"></i>
-
               <iframe
                 id="videoFrame1"
-                src="<%= homepageData['patient-treated']?.mediaUrl %>"
+                src="<%= homepageData['patient-treated']?.mediaUrl || '' %>"
                 frameborder="0"
                 allow="autoplay; encrypted-media"
                 allowfullscreen
               ></iframe>
             </div>
           </div>
-
         </div>
       </div>
 
       <div class="col-lg-6">
         <div class="ps-lg-4">
-
           <%- homepageData['patient-treated']?.content || `
             <h3 class="fw-bold">We Have Treated 12 Million Patients</h3>
-            <p class="size-20 text-muted">
-              Trusted globally for natural and effective healing.
-            </p>
+            <p class="size-20 text-muted">Trusted globally for natural and effective healing.</p>
           ` %>
-
           <div class="d-flex align-items-center mt-3">
             <i class="fa-regular fa-calendar-days fa-2x text-primary"></i>
             <div class="ms-3">
@@ -213,22 +190,15 @@
               <p class="text-muted mb-0">Years Experience</p>
             </div>
           </div>
-
         </div>
       </div>
-
     </div>
-
   </div>
 </section>
 
-<!-- =======================
-      SERVICES SECTION
-=========================== -->
-
+<!-- SERVICES SECTION -->
 <section class="services ptb-90">
   <div class="container">
-
     <div class="text-center mb-4">
       <h3>OUR SERVICES</h3>
       <p class="size-20 text-muted">Comprehensive care for your wellness journey.</p>
@@ -236,265 +206,204 @@
 
     <div class="row">
       <% if (services && services.length > 0) { %>
-
         <% services.forEach(service => { %>
-
           <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mt-4">
-            <div class="service-box shadow rounded">
-              <a href="/services">
-                <img 
-                  src="<%= service.image ? '/uploads/' + service.image : '/front-assets/images/service-placeholder.png' %>" 
-                  alt="<%= service.title %>" 
-                  class="img-fluid w-100 rounded-top"
-                  style="height: 310px; object-fit: cover;"
-                />
-                <div class="service-content text-center p-3">
-                  <p class="size-20 fw-semibold"><%= service.title %></p>
-                </div>
-              </a>
+            <div class="services-box shadow rounded p-3 text-center">
+              <img
+                src="<%= service.image ? '/uploads/' + service.image : '/front-assets/images/service-placeholder.png' %>"
+                class="img-fluid mb-3 rounded"
+                style="height: 200px; object-fit: cover;"
+                alt="<%= service.title %>"
+              />
+              <h6><%= service.title %></h6>
+              <p class="text-muted small">
+                <% 
+                  const desc = service.description || '';
+                  const shortDesc = desc.length > 100 ? desc.substring(0, 100) + '...' : desc;
+                %>
+                <%= shortDesc %>
+              </p>
+              <a href="/services" class="btn btn-primary blue-btn btn-sm">Learn More</a>
             </div>
           </div>
-
         <% }) %>
-
+      <% } else { %>
+        <p class="text-center text-muted">No services available at the moment.</p>
       <% } %>
     </div>
 
-  </div>
-</section>
-
-<!-- =======================
-      FEATURE VIDEO (MATCHED TO FIRST VIDEO)
-=========================== -->
-<section class="video-section ptb-90">
-  <div class="container">
-
-    <div class="row align-items-center">
-
-      <div class="col-lg-6">
-        <div class="video-wrapper shadow feature-video">
-
-          <div class="video-play-button" id="openVideo2">
-            <i class="fa fa-play"></i>
-          </div>
-
-          <div class="video-lightbox" id="videoModal2">
-            <div class="video-backdrop"></div>
-            <div class="video-content-box">
-              <i id="closeVideo2" class="fa fa-times video-close"></i>
-
-              <iframe
-                id="videoFrame2"
-                src="<%= homepageData['feature']?.mediaUrl %>"
-                frameborder="0"
-                allow="autoplay; encrypted-media"
-                allowfullscreen
-              ></iframe>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="col-lg-6">
-        <div class="ps-lg-4">
-          <%- homepageData['feature']?.content %>
-        </div>
-      </div>
-
+    <div class="text-center mt-5">
+      <a href="/services" class="btn btn-primary blue-btn px-5">View All Services</a>
     </div>
-
   </div>
 </section>
 
-<!-- =======================
-      ABOUT SECTION
-=========================== -->
-<section class="about ptb-90">
+<!-- ABOUT CHIROPRACTOR -->
+<section class="about-chiropractor ptb-90 bg-light">
   <div class="container">
     <div class="row align-items-center">
-
       <div class="col-lg-6">
-        <img 
-          src="<%= homepageData['chiropractor']?.mediaUrl || '/front-assets/images/about-img.png' %>" 
+        <img
+          src="<%= homepageData['chiropractor']?.mediaUrl || '/front-assets/images/about-img.png' %>"
           alt="Chiropractor"
           class="img-fluid rounded shadow"
         />
       </div>
-
       <div class="col-lg-6">
         <div class="about-content">
-          <%- homepageData['chiropractor']?.content %>
+          <%- homepageData['chiropractor']?.content || '<p>Tell us about your practice...</p>' %>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- =======================
-      BLOG SECTION
-=========================== -->
+<!-- BLOG SECTION -->
 <section class="blog ptb-90">
   <div class="container">
-
     <div class="text-center mb-4">
       <h3>OUR LATEST BLOG</h3>
       <p class="size-20 text-muted">Latest wellness insights.</p>
     </div>
 
     <div class="row">
-
       <% if (recentBlogs && recentBlogs.length > 0) { %>
-
         <% recentBlogs.forEach(blog => { %>
-
           <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-4">
             <div class="blog-box shadow rounded">
-
               <a href="/blog/<%= blog.id %>">
-                <img 
+                <img
                   src="<%= blog.image ? '/uploads/' + blog.image : '/front-assets/images/blog-placeholder.png' %>"
                   class="img-fluid w-100 rounded-top"
                   style="height: 220px; object-fit: cover;"
+                  alt="<%= blog.title %>"
                 />
               </a>
-
               <div class="blog-content p-3">
                 <h6><%= blog.title %></h6>
                 <p class="text-muted small">
-                  <%= new Date(blog.createdAt).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) %>
+                  <% 
+                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    const formattedDate = new Date(blog.createdAt).toLocaleDateString('en-US', options);
+                  %>
+                  <%= formattedDate %>
                 </p>
-                <p class="text-muted small">
-                  <%= blog.content.length > 100 ? blog.content.substring(0,100)+'...' : blog.content %>
+                <p>
+                  <% 
+                    const content = blog.content || '';
+                    const shortContent = content.length > 100 ? content.substring(0, 100) + '...' : content;
+                  %>
+                  <%= shortContent %>
                 </p>
                 <a class="btn btn-primary blue-btn btn-sm" href="/blog/<%= blog.id %>">Read More</a>
               </div>
-
             </div>
           </div>
-
         <% }) %>
-
       <% } %>
-
     </div>
 
     <div class="text-center mt-5">
       <a href="/blog" class="btn btn-primary blue-btn px-5">View All Blogs</a>
     </div>
-
   </div>
 </section>
 
-<!-- =======================
-      SPECIAL OFFER
-=========================== -->
+<!-- SPECIAL OFFER -->
 <section class="offer-section ptb-90">
   <div class="container">
-
     <div class="offer-box">
       <div class="offer-img">
-        <img 
-          src="<%= homepageData['special-offer']?.mediaUrl %>"   
+        <img
+          src="<%= homepageData['special-offer']?.mediaUrl || '/front-assets/images/offer-default.jpg' %>"
           class="img-fluid"
+          alt="Special Offer"
         />
       </div>
-
       <div class="offer-content">
-        <%- homepageData['special-offer']?.content %>
+        <%- homepageData['special-offer']?.content || '<h3>Special Offer</h3><p>Contact us for current promotions!</p>' %>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- =======================
-      TESTIMONIALS
-=========================== -->
-<div class="testimonial ptb-90 bg-light">
+<!-- TESTIMONIALS SECTION-->
+<section class="testimonial ptb-90 bg-light">
   <div class="container">
-
     <div class="heading w-63 mx-auto text-center mb-5">
       <h3>Reviews about our services</h3>
       <p class="size-20">Hear from our happy patients.</p>
     </div>
 
-    <div class="swiper testimonialSwiper">
-      <div class="swiper-wrapper">
-
-        <% if (ratings && ratings.length > 0) { %>
-
+    <% if (ratings && ratings.length > 0) { %>
+      <div class="swiper testimonialSwiper">
+        <div class="swiper-wrapper">
           <% ratings.forEach(rating => { %>
+            <div class="swiper-slide">
+              <div class="testimonial-content text-center p-4">
+                <img
+                  src="<%= rating.image ? '/uploads/' + rating.image : '/front-assets/images/testimonial-avatar.png' %>"
+                  class="rounded-circle mb-3 shadow"
+                  width="100"
+                  height="100"
+                  style="object-fit: cover; border-radius: 50%; border: 4px solid #007bff; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);"
+                  alt="<%= rating.name %>"
+                />
 
-          <div class="swiper-slide">
-            <div class="testimonial-content text-center p-4">
-              <img src="/front-assets/images/testimonial-avatar.png" 
-                class="rounded-circle mb-3"
-                width="90" height="90">
+                <div class="testi-reviews mb-3">
+                  <% for(let i = 1; i <= 5; i++) { %>
+                    <% if (i <= rating.rating) { %>
+                      <i class="fas fa-star text-warning"></i>
+                    <% } else { %>
+                      <i class="far fa-star text-muted"></i>
+                    <% } %>
+                  <% } %>
+                </div>
 
-              <div class="testi-reviews mb-2">
-                <% for(let i=1; i<=5; i++) { %>
-                  <i class="fa-star <%= i <= rating.rating ? 'fas text-warning' : 'far text-muted' %>"></i>
-                <% } %>
+                <p class="fst-italic text-muted">
+                  "<%= rating.message || 'No review message provided.' %>"
+                </p>
+
+                <h6 class="mt-3"><%= rating.name %></h6>
+                <small class="text-muted">Happy Patient</small>
               </div>
-
-              <p class="fst-italic">"<%= rating.message %>"</p>
-              <h6><%= rating.name %></h6>
-              <small class="text-muted">Happy Patient</small>
             </div>
-          </div>
-
           <% }) %>
+        </div>
 
-        <% } %>
-
+        <div class="swiper-pagination mt-4"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
       </div>
-
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-
-    </div>
-
+    <% } else { %>
+      <p class="text-center text-muted">No reviews yet. Be the first to share your experience!</p>
+    <% } %>
   </div>
-</div>
+</section>
 
-<!-- =======================
-  POPUP VIDEO JAVASCRIPT
-=========================== -->
+<!-- VIDEO POPUP SCRIPT -->
 <script>
-  /* Patient Video */
   const open1 = document.getElementById("openVideo1");
   const modal1 = document.getElementById("videoModal1");
   const close1 = document.getElementById("closeVideo1");
   const frame1 = document.getElementById("videoFrame1");
 
-  open1.addEventListener("click", () => {
-    modal1.style.display = "block";
-    frame1.src = frame1.src;
-  });
+  if (open1 && modal1 && close1) {
+    open1.addEventListener("click", () => {
+      modal1.style.display = "block";
+      frame1.src = frame1.src;
+    });
 
-  close1.addEventListener("click", () => {
-    modal1.style.display = "none";
-    frame1.src = frame1.src;
-  });
+    close1.addEventListener("click", () => {
+      modal1.style.display = "none";
+      frame1.src = frame1.src;
+    });
 
-  /* Feature Video */
-  const open2 = document.getElementById("openVideo2");
-  const modal2 = document.getElementById("videoModal2");
-  const close2 = document.getElementById("closeVideo2");
-  const frame2 = document.getElementById("videoFrame2");
-
-  open2.addEventListener("click", () => {
-    modal2.style.display = "block";
-    frame2.src = frame2.src;
-  });
-
-  close2.addEventListener("click", () => {
-    modal2.style.display = "none";
-    frame2.src = frame2.src;
-  });
+    modal1.querySelector('.video-backdrop').addEventListener('click', () => {
+      modal1.style.display = "none";
+      frame1.src = frame1.src;
+    });
+  }
 </script>
 
 <%- include("./layouts/footer.ejs") %>

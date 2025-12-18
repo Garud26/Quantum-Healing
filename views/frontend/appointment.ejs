@@ -42,13 +42,15 @@
                   <label for="service" class="form-label fw-medium">Service Required <span class="text-danger">*</span></label>
                   <select class="form-select form-select-lg" id="service" name="service" required>
                     <option value="" disabled <%= !locals.old || !old.service ? 'selected' : '' %>>Choose a service</option>
-                    <option value="General Checkup" <%= locals.old && old.service === 'General Checkup' ? 'selected' : '' %>>General Checkup</option>
-                    <option value="Dental Care" <%= locals.old && old.service === 'Dental Care' ? 'selected' : '' %>>Dental Care</option>
-                    <option value="Cardiology" <%= locals.old && old.service === 'Cardiology' ? 'selected' : '' %>>Cardiology</option>
-                    <option value="Pediatrics" <%= locals.old && old.service === 'Pediatrics' ? 'selected' : '' %>>Pediatrics</option>
-                    <option value="Dermatology" <%= locals.old && old.service === 'Dermatology' ? 'selected' : '' %>>Dermatology</option>
-                    <option value="Orthopedics" <%= locals.old && old.service === 'Orthopedics' ? 'selected' : '' %>>Orthopedics</option>
-                    <option value="Other" <%= locals.old && old.service === 'Other' ? 'selected' : '' %>>Other</option>
+                    <% if (typeof services !== 'undefined' && services.length > 0) { %>
+                      <% services.forEach(service => { %>
+                        <option value="<%= service.title %>" <%= locals.old && old.service === service.title ? 'selected' : '' %>>
+                          <%= service.title %>
+                        </option>
+                      <% }) %>
+                    <% } else { %>
+                      <option value="" disabled>No services available</option>
+                    <% } %>
                   </select>
                 </div>
 

@@ -14,7 +14,10 @@
     <link rel="stylesheet" href="/front-assets/css/style.css" />
     <link rel="stylesheet" href="/front-assets/css/responsive.css" />
     <!-- Swiper CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
   </head>
   <body>
     <header>
@@ -22,10 +25,14 @@
         <div class="container-fluid">
           <a class="navbar-brand" href="/">
             <!-- DYNAMIC LOGO IN MAIN NAVBAR -->
-            <% if (typeof imagesLogo !== 'undefined' && imagesLogo && imagesLogo.logo) { %>
-              <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
+            <% if (typeof imagesLogo !== 'undefined' && imagesLogo &&
+            imagesLogo.logo) { %>
+            <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
             <% } else { %>
-              <img src="/front-assets/images/Quantum-log.svg" alt="Quantum Healing Logo" />
+            <img
+              src="/front-assets/images/Quantum-log.svg"
+              alt="Quantum Healing Logo"
+            />
             <% } %>
           </a>
           <button
@@ -44,10 +51,14 @@
             <div class="offcanvas-header">
               <a href="/" class="offcanvas-title offcanvas-logo">
                 <!-- DYNAMIC LOGO IN MOBILE/OFFCANVAS MENU -->
-                <% if (typeof imagesLogo !== 'undefined' && imagesLogo && imagesLogo.logo) { %>
-                  <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
+                <% if (typeof imagesLogo !== 'undefined' && imagesLogo &&
+                imagesLogo.logo) { %>
+                <img src="<%= imagesLogo.logo %>" alt="Quantum Healing Logo" />
                 <% } else { %>
-                  <img src="/front-assets/images/Quantum-log.svg" alt="Quantum Healing Logo" />
+                <img
+                  src="/front-assets/images/Quantum-log.svg"
+                  alt="Quantum Healing Logo"
+                />
                 <% } %>
               </a>
               <button
@@ -103,6 +114,51 @@
                   >
                     APPOINTMENT
                   </a>
+                </li>
+                <!-- USER AUTH SECTION -->
+                <li class="nav-item dropdown">
+                  <a
+                    class="nav-link dropdown-toggle"
+                    href="#"
+                    id="userDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <% if (session.userName) { %>
+                    <i class="fas fa-user me-1"></i> <%=
+                    session.userName.split(' ')[0] %> <% } else { %>
+                    <i class="fas fa-user"></i>
+                    <% } %>
+                  </a>
+                  <ul
+                    class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="userDropdown"
+                  >
+                    <% if (session.userName) { %>
+                    <li>
+                      <a class="dropdown-item" href="/user-profile"
+                        >My Profile</a
+                      >
+                    </li>
+                    <!-- Optional future page -->
+                    <li><hr class="dropdown-divider" /></li>
+                    <li>
+                      <a class="dropdown-item text-danger" href="/user-logout"
+                        >Logout</a
+                      >
+                    </li>
+                    <% } else { %>
+                    <li>
+                      <a class="dropdown-item" href="/user-login">Login</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="/user-login#register"
+                        >Register</a
+                      >
+                    </li>
+                    <% } %>
+                  </ul>
                 </li>
               </ul>
             </div>

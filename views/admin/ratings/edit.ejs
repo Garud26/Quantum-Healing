@@ -1,38 +1,45 @@
 <%- include("../layouts/header") %>
 <%- include("../layouts/sidebar") %>
 
-
 <div class="content-body">
   <div class="container-fluid">
-    <h3><%= rating ? 'Edit' : 'Add' %> Rating</h3>
+    <h3>Edit Rating</h3>
 
-    <form action="<%= rating ? '/admin/ratings/edit/' + rating.id : '/admin/ratings/add' %>" method="POST">
+    <form action="/admin/ratings/edit/<%= rating.id %>" method="POST" enctype="multipart/form-data">
       <div class="row">
         <div class="col-md-6">
           <div class="mb-3">
-            <label>Name</label>
-            <input type="text" name="name" class="form-control" value="<%= rating?.name %>" required>
+            <label>Name <span class="text-danger">*</span></label>
+            <input type="text" name="name" class="form-control" value="<%= rating.name %>" required>
           </div>
         </div>
         <div class="col-md-6">
           <div class="mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" value="<%= rating?.email %>" required>
+            <label>Email <span class="text-danger">*</span></label>
+            <input type="email" name="email" class="form-control" value="<%= rating.email %>" required>
           </div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label>Rating (1-5)</label>
-        <input type="number" name="rating" min="1" max="5" class="form-control" value="<%= rating?.rating || 5 %>" required>
+        <label>Rating (1-5) <span class="text-danger">*</span></label>
+        <input type="number" name="rating" min="1" max="5" class="form-control" value="<%= rating.rating %>" required>
       </div>
 
       <div class="mb-3">
         <label>Message / Review</label>
-        <textarea name="message" class="form-control" rows="5"><%= rating?.message %></textarea>
+        <textarea name="message" class="form-control" rows="5"><%= rating.message %></textarea>
       </div>
 
-      <button type="submit" class="btn btn-success">Save Rating</button>
+      <div class="mb-3">
+        <label>Image (Optional)</label>
+        <input type="file" name="image" class="form-control">
+        <% if (rating.image) { %>
+          <img src="/uploads/<%= rating.image %>" width="100" class="mt-2" alt="Current Image">
+        <% } %>
+      </div>
+
+      <button type="submit" class="btn btn-success">Update Rating</button>
       <a href="/admin/ratings" class="btn btn-secondary">Cancel</a>
     </form>
   </div>

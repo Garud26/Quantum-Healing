@@ -6,10 +6,10 @@ const Rating = require("../../models/Rating");
 const HomePageSetting = require("../../models/HomePageSetting");
 const AboutUsSetting = require("../../models/AboutUsSetting");
 const ContactSettings = require("../../models/ContactSettings");
-const ImagesLogo = require("../../models/ImagesLogo"); // ADD THIS LINE
+const ImagesLogo = require("../../models/ImagesLogo"); 
 
 class FrontController {
-  // Middleware to load ImagesLogo for all frontend pages
+  
   static async loadImagesLogo(req, res, next) {
     try {
       let imagesLogo = await ImagesLogo.findOne();
@@ -19,12 +19,12 @@ class FrontController {
           gallery_images: []
         };
       } else {
-        // Ensure gallery_images is always an array (safety)
+        
         if (!Array.isArray(imagesLogo.gallery_images)) {
           imagesLogo.gallery_images = [];
         }
       }
-      res.locals.imagesLogo = imagesLogo; // Make available in all views
+      res.locals.imagesLogo = imagesLogo; 
       next();
     } catch (err) {
       console.error("Error loading ImagesLogo:", err);
@@ -69,7 +69,7 @@ class FrontController {
         services: services || [],
         ratings: ratings || [],
         homepageData: homepageData || {},
-        // imagesLogo is already in res.locals
+        
       });
     } catch (err) {
       console.error("Home page error:", err);
@@ -215,11 +215,31 @@ class FrontController {
     res.render("frontend/contact", { title: "Contact", path: "/contact" });
   }
 
-  static appointment(req, res) {
-    res.render("frontend/appointment", {
-      title: "Appointment",
-      path: "/appointment",
-    });
+  // Appointment page 
+  static async appointment(req, res) {
+    try {
+      const services = await Service.findAll({
+        where: { is_active: true },
+        order: [["order_no", "ASC"], ["id", "DESC"]],
+      });
+
+      const old = req.flash('old')[0] || null;
+
+      res.render("frontend/appointment", {
+        title: "Appointment",
+        path: "/appointment",
+        services: services || [],
+        old: old,
+      });
+    } catch (err) {
+      console.error("Error loading appointment page:", err);
+      res.render("frontend/appointment", {
+        title: "Appointment",
+        path: "/appointment",
+        services: [],
+        old: null,
+      });
+    }
   }
 
   static async aboutUs(req, res) {

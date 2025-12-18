@@ -1,6 +1,6 @@
 // controllers/adminController.js
 
-const User = require("../models/User");
+const Admin = require("../models/Admin");  // ← Correct import of Admin model
 const bcrypt = require("bcrypt");
 
 module.exports = {
@@ -16,14 +16,15 @@ module.exports = {
     try {
       const { email, password } = req.body;
 
-      const user = await User.findOne({ where: { email } });
+      const admin = await Admin.findOne({ where: { email } });
 
-      if (!user) {
+      if (!admin) {
         req.flash("error", "Invalid Email or Password");
         return res.redirect("/admin/login");
       }
 
-      let hashedPassword = user.password;
+      let hashedPassword = admin.password;
+      // Fix for passwords hashed with older bcrypt versions ($2y$ → $2a$)
       if (hashedPassword.startsWith("$2y$")) {
         hashedPassword = hashedPassword.replace("$2y$", "$2a$");
       }
@@ -34,7 +35,8 @@ module.exports = {
         return res.redirect("/admin/login");
       }
 
-      req.session.user = user.get({ plain: true });
+      // Store admin data in session
+      req.session.user = admin.get({ plain: true });
       req.flash("success", "Welcome back!");
       res.redirect("/admin/dashboard");
     } catch (err) {
@@ -59,7 +61,7 @@ module.exports = {
     });
   },
 
-  // Update Profile
+  // Update Profile (called "register" in your route, but it's actually update)
   register: async (req, res) => {
     try {
       if (!req.session.user) {
@@ -88,10 +90,12 @@ module.exports = {
         updateData.Profile_img = req.file.filename;
       }
 
-      await User.update(updateData, { where: { id: adminId } });
+      // Update in Admins table
+      await Admin.update(updateData, { where: { id: adminId } });
 
-      const updatedUser = await User.findByPk(adminId);
-      req.session.user = updatedUser.get({ plain: true });
+      // Refresh session with updated data
+      const updatedAdmin = await Admin.findByPk(adminId);
+      req.session.user = updatedAdmin.get({ plain: true });
 
       req.flash("success", "Profile updated successfully!");
       res.redirect("/admin/admin-profile");
@@ -101,8 +105,6 @@ module.exports = {
       res.redirect("/admin/admin-profile");
     }
   },
-
-  
 
   // Logout
   logout: (req, res) => {

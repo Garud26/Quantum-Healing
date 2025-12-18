@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Login / Register</title>
+  <link href="/front-assets/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style>
+    body { background: #f8f9fa; min-height: 100vh; display: flex; align-items: center; }
+    .auth-container { max-width: 400px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); overflow: hidden; }
+    .auth-header { background: #007bff; color: white; padding: 20px; text-align: center; }
+    .auth-body { padding: 30px; }
+    .tab-link { width: 50%; padding: 12px; background: #f1f1f1; border: none; font-weight: bold; }
+    .tab-link.active { background: #007bff; color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .error { color: red; font-size: 0.9em; margin-top: 10px; text-align: center; }
+    .form-control { margin-bottom: 15px; }
+    button.btn-primary, button.btn-success { width: 100%; padding: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="auth-container">
+      <div class="auth-header">
+        <h3>Welcome</h3>
+        <p>Please login or create an account</p>
+      </div>
+      <div class="auth-body">
+        <div class="d-flex">
+          <button class="tab-link active" onclick="openTab(event, 'login')">Login</button>
+          <button class="tab-link" onclick="openTab(event, 'register')">Register</button>
+        </div>
+
+        <% if (message) { %>
+          <div class="error"><%= message %></div>
+        <% } %>
+
+        <!-- Login Form -->
+        <div id="login" class="tab-content active">
+          <form action="/user-login" method="POST">
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register" class="tab-content">
+          <form action="/user-register" method="POST">
+            <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <button type="submit" class="btn btn-success mt-3">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Remove active from all buttons
+      document.querySelectorAll('.tab-link').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show the selected tab
+      document.getElementById(tabName).classList.add('active');
+
+      // Highlight the clicked button
+      evt.currentTarget.classList.add('active');
+    }
+
+    // Auto-open Register tab if URL has #register
+    window.addEventListener('load', function() {
+      if (window.location.hash === '#register') {
+        document.querySelector('.tab-link:nth-child(2)').click();
+      }
+    });
+  </script>
+
+  <script src="/front-assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

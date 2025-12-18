@@ -8,9 +8,30 @@ const Blog = sequelize.define("Blog", {
   content: { type: DataTypes.TEXT, allowNull: false },
   author: DataTypes.STRING,
   image: DataTypes.STRING,
-  tags: DataTypes.STRING,
+  tags: {
+    type: DataTypes.STRING,
+    get() {
+      const rawValue = this.getDataValue('tags');
+      if (!rawValue) return [];
+      try {
+        return JSON.parse(rawValue);
+      } catch (e) {
+        // Fallback: if it's comma-separated string (legacy data)
+        return rawValue.split(',').map(t => t.trim()).filter(t => t);
+      }
+    },
+    set(value) {
+      if (Array.isArray(value)) {
+        this.setDataValue('tags', JSON.stringify(value));
+      } else if (typeof value === 'string') {
+        this.setDataValue('tags', JSON.stringify(value.split(',').map(t => t.trim()).filter(t => t)));
+      } else {
+        this.setDataValue('tags', JSON.stringify([]));
+      }
+    }
+  },
 }, {
-  tableName: "Blogs",                // change to "blogs" if your table is lowercase
+  tableName: "Blogs",
   timestamps: false,
 });
 
