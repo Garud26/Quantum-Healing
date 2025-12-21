@@ -149,7 +149,7 @@
   </div>
 </div>
 
-<!-- Latest Quill Editor v2.0.2 -->
+
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 
@@ -211,7 +211,7 @@
 </style>
 
 <script>
-  // Initialize Quill Editors (Latest v2)
+  
   const quillEditors = {
     about_me: new Quill('#about_me_editor', {
       theme: 'snow',
@@ -239,7 +239,7 @@
     })
   };
 
-  // Sync Quill content to hidden textarea on submit
+
   document.getElementById('aboutUsForm').onsubmit = function() {
     document.getElementById('about_me_content_hidden').value = quillEditors.about_me.root.innerHTML;
     document.getElementById('who_we_are_content_hidden').value = quillEditors.who_we_are.root.innerHTML;

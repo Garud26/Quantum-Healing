@@ -18,8 +18,8 @@ class UserController {
   static async login(req, res) {
     try {
       const { email, password } = req.body;
-
-      const user = await User.findOne({ where: { email } });
+      let role = 'user';
+      const user = await User.findOne({ where: { email, role} });
 
       if (!user || !(await bcrypt.compare(password, user.password))) {
         req.flash("message", "Invalid email or password");

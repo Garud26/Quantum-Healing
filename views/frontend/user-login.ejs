@@ -61,24 +61,23 @@
 
   <script>
     function openTab(evt, tabName) {
-      // Hide all tab contents
+
       document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
       });
 
-      // Remove active from all buttons
       document.querySelectorAll('.tab-link').forEach(btn => {
         btn.classList.remove('active');
       });
 
-      // Show the selected tab
+      
       document.getElementById(tabName).classList.add('active');
 
-      // Highlight the clicked button
+      
       evt.currentTarget.classList.add('active');
     }
 
-    // Auto-open Register tab if URL has #register
+    
     window.addEventListener('load', function() {
       if (window.location.hash === '#register') {
         document.querySelector('.tab-link:nth-child(2)').click();

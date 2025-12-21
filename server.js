@@ -36,19 +36,19 @@ app.use(
 
 app.use(flash());
 
-// ==================== CRITICAL FIX: Make session available in views ====================
+// ====================  Make session available in views ====================
 app.use((req, res, next) => {
-  res.locals.session = req.session;        // Now you can use <%= session.userName %> in EJS
+  res.locals.session = req.session;        
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  res.locals.message = req.flash("message"); // For custom messages in user auth
+  res.locals.message = req.flash("message"); 
   next();
 });
 // =====================================================================================
 
 // View Engine
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); // Explicitly set views folder
+app.set("views", path.join(__dirname, "views")); 
 
 // Test DB Connection
 sequelize
@@ -66,6 +66,9 @@ app.use(attachUser);
 // Routes
 const adminRoutes = require("./routes/admin");
 const frontendRoutes = require("./routes/frontend");
+const myapis = require("./routes/api/apis");
+
+app.use("/api/myapis", myapis);
 
 app.use("/admin", adminRoutes);
 app.use("/", frontendRoutes);

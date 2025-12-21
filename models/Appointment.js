@@ -1,41 +1,49 @@
 // models/Appointment.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../config/db'); 
 
 const Appointment = sequelize.define('Appointment', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: true,
-    },
+    allowNull: false
   },
   phone: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   service: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   preferred_date: {
     type: DataTypes.DATEONLY,
-    allowNull: false,
+    allowNull: false
   },
   preferred_time: {
     type: DataTypes.TIME,
-    allowNull: false,
+    allowNull: false
   },
   message: {
     type: DataTypes.TEXT,
-    allowNull: true,
+    allowNull: true
   },
+  status: {
+    type: DataTypes.ENUM('Pending', 'Processing', 'Confirmed', 'Completed'),
+    allowNull: false,
+    defaultValue: 'Pending' 
+  }
 }, {
-  timestamps: true,
+  tableName: 'appointments',
+  timestamps: true
 });
 
 module.exports = Appointment;

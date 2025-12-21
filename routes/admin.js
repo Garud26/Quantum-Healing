@@ -17,9 +17,11 @@ const contactFormCtrl           = require("../controllers/contactFormController"
 const contactFormAdminController = require('../controllers/admin/contactFormAdminController');
 const appointmentAdminController = require('../controllers/admin/appointmentAdminController');
 const imagesLogoController = require("../controllers/imagesLogoController");
+const appointmentController = require("../controllers/appointmentController");
 
 // ====================== MIDDLEWARE ======================
 const auth   = require("../middleware/auth");
+const requireAuth = require("../middleware/requireAuth");
 const upload = require("../middleware/upload");
 
 // ==================== PUBLIC LOGIN ROUTES ====================
@@ -27,7 +29,7 @@ router.get("/login", adminController.loginPage);
 router.post("/loginsubmit", adminController.login);
 
 // ==================== PROTECTED ROUTES (Require Login) ====================
-router.use(auth); // ← All routes below this line require authentication
+router.use(requireAuth); // ← All routes below this line require authentication
 
 // Dashboard & Profile
 router.get("/dashboard", adminController.dashboard);
@@ -129,7 +131,7 @@ router.get('/contact-forms',  contactFormAdminController.list);
 router.get('/appointments', appointmentAdminController.list);
 router.post('/appointments/edit/:id', appointmentAdminController.update);
 router.get('/appointments/delete/:id', appointmentAdminController.delete);
-
+router.post('/appointments/status/:id', appointmentController.updateStatus);
 // ==================== IMAGES & LOGO SETTINGS ROUTES ====================
 
 router.get("/images-logo", imagesLogoController.index);
