@@ -1,4 +1,4 @@
-// routes/frontend.js
+
 const express = require("express");
 const router = express.Router();
 
@@ -6,11 +6,12 @@ const FrontController = require("../controllers/frontendControllers/frontControl
 const contactFormController = require("../controllers/contactFormController");
 const appointmentController = require("../controllers/appointmentController");
 const UserController = require("../controllers/frontendControllers/UserController");
+const authUser = require("../middleware/authUser");
 
 const { body, validationResult } = require("express-validator");
 
-// APPLY MIDDLEWARE TO LOAD IMAGESLOGO FOR ALL FRONTEND VIEWS
-router.use(FrontController.loadImagesLogo); // This ensures imagesLogo is available on EVERY page
+
+router.use(FrontController.loadImagesLogo); 
 
 router.get("/", FrontController.home);
 router.get("/about-us", FrontController.aboutUs);
@@ -55,6 +56,16 @@ router.post("/user-login", UserController.login);
 
 // Register Submit
 router.post("/user-register", UserController.register);
+
+// User Dashboard Routes (Protected)
+
+
+router.get("/dashboard", authUser, UserController.dashboard);
+router.get("/my-appointments", authUser, UserController.myAppointments);
+
+router.post("/update-profile", authUser, UserController.updateProfile);
+router.post("/update-password", authUser, UserController.updatePassword);
+router.post("/update-profile-image", authUser, UserController.updateProfileImage);
 
 // Logout
 router.get("/user-logout", UserController.logout);

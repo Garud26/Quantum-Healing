@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="/front-assets/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+  <style>
+    .profile-img { width: 130px; height: 130px; object-fit: cover; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+    .sidebar .list-group-item.active { background: #007bff; border-color: #007bff; }
+  </style>
+</head>
+<body>
+  <%- include("../layouts/header.ejs") %>
+
+  <div class="container my-5">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-3 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-body text-center p-4">
+            <img src="<%= user.profile_img %>" class="profile-img mb-3" alt="Profile">
+            <h5 class="mb-1"><%= user.name %></h5>
+            <p class="text-muted small"><%= user.email %></p>
+            <a href="/user-logout" class="btn btn-outline-danger btn-sm mt-3">Logout</a>
+          </div>
+          <div class="list-group list-group-flush">
+            <a href="/dashboard" class="list-group-item list-group-item-action active">Profile Settings</a>
+            <a href="/my-appointments" class="list-group-item list-group-item-action">My Appointments</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <% if (message) { %>
+          <div class="alert alert-<%= messageType %> alert-dismissible fade show">
+            <%= message %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% } %>
+
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Update Profile</h4>
+          </div>
+          <div class="card-body">
+            <!-- Update Name -->
+            <form action="/update-profile" method="POST" class="mb-4">
+              <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="name" class="form-control" value="<%= user.name %>" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Update Name</button>
+            </form>
+
+            <hr>
+
+            <!-- Change Password -->
+            <h5>Change Password</h5>
+            <form action="/update-password" method="POST" class="mb-4">
+              <div class="mb-3">
+                <label class="form-label">Current Password</label>
+                <input type="password" name="currentPassword" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">New Password</label>
+                <input type="password" name="newPassword" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-warning">Change Password</button>
+            </form>
+
+            <hr>
+
+            <!-- Update Profile Picture -->
+            <h5>Update Profile Picture</h5>
+            <form action="/update-profile-image" method="POST" enctype="multipart/form-data">
+              <div class="mb-3">
+                <input type="file" name="profileImage" accept="image/*" class="form-control" required>
+                <small class="text-muted">Accepted: JPG, PNG, GIF</small>
+              </div>
+              <button type="submit" class="btn btn-success">Upload New Picture</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/front-assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

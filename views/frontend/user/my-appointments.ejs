@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link href="/front-assets/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+   <%- include("../layouts/header.ejs") %>
+
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-lg-3 mb-4">
+        <%- include('dashboard-sidebar') %>
+      </div>
+
+      <div class="col-lg-9">
+        <h3 class="mb-4">My Appointments</h3>
+
+        <% if (message) { %>
+          <div class="alert alert-info alert-dismissible fade show">
+            <%= message %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        <% } %>
+
+        <% if (appointments.length === 0) { %>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> You have no appointments yet. 
+            <a href="/appointment">Book one now!</a>
+          </div>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered align-middle">
+              <thead class="table-primary">
+                <tr>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Service</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% appointments.forEach(apt => { %>
+                  <tr>
+                    <td><%= new Date(apt.preferred_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></td>
+                    <td><%= apt.preferred_time.slice(0,5) %></td>
+                    <td><%= apt.service %></td>
+                    <td>
+                      <% 
+                        const status = apt.status || 'Pending';
+                        const badge = {
+                          'Pending': 'bg-warning text-dark',
+                          'Processing': 'bg-info',
+                          'Confirmed': 'bg-success',
+                          'Completed': 'bg-secondary'
+                        }[status] || 'bg-secondary';
+                      %>
+                      <span class="badge <%= badge %> fs-6"><%= status %></span>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <script src="/front-assets/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
