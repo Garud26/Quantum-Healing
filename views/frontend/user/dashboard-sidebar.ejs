@@ -1,12 +1,11 @@
 <div class="card shadow-sm">
   <div class="card-body text-center p-4">
-    <img src="<%= user.profile_img %>" class="rounded-circle mb-3" width="130" style="object-fit: cover; border: 4px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.1);" alt="Profile">
     <h5 class="mb-1"><%= user.name %></h5>
     <p class="text-muted small"><%= user.email %></p>
     <a href="/user-logout" class="btn btn-outline-danger btn-sm mt-3">Logout</a>
   </div>
   <div class="list-group list-group-flush">
     <a href="/dashboard" class="list-group-item list-group-item-action">Profile Settings</a>
-    <a href="/my-appointments" class="list-group-item list-group-item-action active">My Appointments</a>
+    <a href="/my-appointments" class="list-group-item list-group-item-action">My Appointments</a>
   </div>
 </div>

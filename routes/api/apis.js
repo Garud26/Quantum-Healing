@@ -1,10 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const MyApis = require('../../controllers/MyApis/ApiController');
+const MyApis = require("../../controllers/MyApis/ApiController");
 
-// Test API
+// Register Route
+router.post("/admin-register", MyApis.registerAdmin);
 
-router.get("/test-admin-logout", MyApis.myfirstAPI);
+// Login Route
+router.post("/admin-login", MyApis.myLogINAPI);
 
+// Logout Route
+router.get("/admin-logout", MyApis.myfirstAPI);
 
 module.exports = router;

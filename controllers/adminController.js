@@ -1,6 +1,6 @@
 // controllers/adminController.js
 
-const Admin = require("../models/Admin");  // ← Correct import of Admin model
+const Admin = require("../models/Admin");  
 const bcrypt = require("bcrypt");
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
       }
 
       let hashedPassword = admin.password;
-      // Fix for passwords hashed with older bcrypt versions ($2y$ → $2a$)
+
       if (hashedPassword.startsWith("$2y$")) {
         hashedPassword = hashedPassword.replace("$2y$", "$2a$");
       }
