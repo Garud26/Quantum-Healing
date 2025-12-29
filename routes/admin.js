@@ -29,7 +29,7 @@ router.get("/login", adminController.loginPage);
 router.post("/loginsubmit", adminController.login);
 
 // ==================== PROTECTED ROUTES (Require Login) ====================
-router.use(requireAuth); // ← All routes below this line require authentication
+router.use(requireAuth); 
 
 // Dashboard & Profile
 router.get("/dashboard", adminController.dashboard);
@@ -124,8 +124,10 @@ router.post('/contact-settings',
   contactSettingsCtrl.update
 );
 
-router.get('/contact-forms', contactSettingsCtrl.listForms);
-router.get('/contact-forms',  contactFormAdminController.list);
+// ==================== CONTACT FORM MESSAGES ====================
+router.get('/contact-forms', contactFormAdminController.list);
+router.post('/contact-forms/update/:id', contactFormAdminController.update);
+router.post('/contact-forms/delete/:id', contactFormAdminController.delete);
 
 // ==================== APPOINTMENT REQUESTS ====================
 router.get('/appointments', appointmentAdminController.list);

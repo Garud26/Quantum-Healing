@@ -3,15 +3,16 @@
 
 <div class="content-body">
   <div class="container-fluid">
+
+    <!-- ===================== BREADCRUMB NAVIGATION ===================== -->
     <div class="row page-titles">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="/admin/contact-settings">Contact Settings</a></li>
+        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li> 
         <li class="breadcrumb-item active">Contact Form Messages</li>
       </ol>
     </div>
 
-    <!-- Flash Messages -->
+    <!-- ===================== FLASH MESSAGES (Success / Error) ===================== -->
     <% if (messages?.success) { %>
       <div class="alert alert-success alert-dismissible fade show shadow-sm">
         <i class="fas fa-check-circle me-2"></i><%= messages.success %>
@@ -25,78 +26,163 @@
       </div>
     <% } %>
 
-    <div class="row">
-      <div class="col-12">
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4 class="card-title mb-0">
-              <i class="fas fa-envelope-open-text me-2"></i>
-              Contact Form Messages (<%= forms.length %>)
-            </h4>
-            <a href="/admin/contact-settings" class="btn btn-light btn-sm">
-              <i class="fas fa-cog me-1"></i> Back to Contact Settings
-            </a>
-          </div>
-          <div class="card-body p-4">
+    <!-- ===================== MAIN LIST VIEW: All Contact Messages ===================== -->
+    <div id="list-view">
+      <div class="row">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
 
-            <% if (forms && forms.length > 0) { %>
-              <div class="table-responsive">
-                <table class="table table-hover table-bordered align-middle">
-                  <thead class="table-light">
-                    <tr>
-                      <th width="15%">Name</th>
-                      <th width="18%">Email</th>
-                      <th width="15%">Subject</th>
-                      <th width="35%">Message</th>
-                      <th width="12%">Date</th>
-                      <th width="5%">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% forms.forEach(form => { %>
+            <!-- Card Header: Title + Back Button -->
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+              <h4 class="card-title mb-0">
+                <i class="fas fa-envelope-open-text me-2"></i>
+                Contact Form Messages (<%= forms.length %>)
+              </h4>
+              <a href="/admin/contact-settings" class="btn btn-light btn-sm">
+                <i class="fas fa-cog me-1"></i> Back to Contact Settings
+              </a>
+            </div>
+
+            <!-- Card Body: Table or Empty State -->
+            <div class="card-body p-4">
+              <% if (forms && forms.length > 0) { %>
+
+                <!-- Messages Table -->
+                <div class="table-responsive">
+                  <table class="table table-hover table-bordered align-middle">
+                    <thead class="table-light">
                       <tr>
-                        <td><strong><%= form.name %></strong></td>
-                        <td>
-                          <a href="mailto:<%= form.email %>"><%= form.email %></a>
-                        </td>
-                        <td><%= form.subject || '<em>No subject</em>' %></td>
-                        <td class="text-truncate" style="max-width: 300px;" title="<%= form.message %>">
-                          <%= form.message.length > 100 ? form.message.substring(0, 100) + '...' : form.message %>
-                        </td>
-                        <td><%= new Date(form.createdAt).toLocaleString() %></td>
-                        <td class="text-center">
-                          <button class="btn btn-sm btn-info view-message" 
-                                  data-bs-toggle="modal" 
-                                  data-bs-target="#messageModal"
-                                  data-name="<%= form.name %>"
-                                  data-email="<%= form.email %>"
-                                  data-subject="<%= form.subject || 'No subject' %>"
-                                  data-message="<%= form.message.replace(/"/g, '&quot;') %>"
-                                  data-date="<%= new Date(form.createdAt).toLocaleString() %>">
-                            <i class="fas fa-eye"></i>
-                          </button>
-                        </td>
+                        <th width="15%">Name</th>
+                        <th width="18%">Email</th>
+                        <th width="15%">Subject</th>
+                        <th width="27%">Message</th>     <!-- Reduced slightly to accommodate wider Actions -->
+                        <th width="12%">Date</th>
+                        <th width="20%">Actions</th>     <!-- Increased to 20% for comfortable button spacing -->
                       </tr>
-                    <% }) %>
-                  </tbody>
-                </table>
-              </div>
-            <% } else { %>
-              <div class="alert alert-info text-center py-5">
-                <i class="fas fa-info-circle fa-3x mb-3 text-info"></i>
-                <h5>No messages yet</h5>
-                <p class="text-muted">When visitors submit the contact form, their messages will appear here.</p>
-              </div>
-            <% } %>
+                    </thead>
+                    <tbody>
+                      <% forms.forEach(form => { %>
+                        <tr>
+                          <td><strong><%= form.name %></strong></td>
+                          <td><a href="mailto:<%= form.email %>"><%= form.email %></a></td>
+                          <td><%= form.subject || '<em>No subject</em>' %></td>
+                          <td class="text-truncate" style="max-width: 300px;" title="<%= form.message %>">
+                            <%= form.message.length > 100 ? form.message.substring(0, 100) + '...' : form.message %>
+                          </td>
+                          <td><%= new Date(form.createdAt).toLocaleString() %></td>
 
+                          <!-- Action Buttons: View, Edit, Delete -->
+                          <td class="text-center">
+                            <!-- View Message Button -->
+                            <button class="btn btn-sm btn-info view-message me-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#messageModal"
+                                    data-name="<%= form.name %>"
+                                    data-email="<%= form.email %>"
+                                    data-subject="<%= form.subject || 'No subject' %>"
+                                    data-message="<%= form.message.replace(/"/g, '&quot;') %>"
+                                    data-date="<%= new Date(form.createdAt).toLocaleString() %>"
+                                    title="View Full Message">
+                              <i class="fas fa-eye me-1"></i> View
+                            </button>
+
+                            <!-- Edit Message Button -->
+                            <button class="btn btn-sm btn-warning edit-message me-1"
+                                    data-id="<%= form.id %>"
+                                    data-name="<%= form.name %>"
+                                    data-email="<%= form.email %>"
+                                    data-subject="<%= form.subject || '' %>"
+                                    data-message="<%= form.message.replace(/"/g, '&quot;') %>"
+                                    title="Edit Message">
+                              <i class="fas fa-edit me-1"></i> Edit
+                            </button>
+
+                            <!-- Delete Message Button -->
+                            <form action="/admin/contact-forms/delete/<%= form.id %>" method="POST" style="display:inline;"
+                                  onsubmit="return confirm('Are you sure you want to delete this message from <%= form.name %>?');">
+                              <button type="submit" class="btn btn-sm btn-danger" title="Delete Message">
+                                <i class="fas fa-trash me-1"></i> Delete
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+
+              <% } else { %>
+
+                <!-- Empty State: No Messages Yet -->
+                <div class="alert alert-info text-center py-5">
+                  <i class="fas fa-info-circle fa-3x mb-3 text-info"></i>
+                  <h5>No messages yet</h5>
+                  <p class="text-muted">When visitors submit the contact form, their messages will appear here.</p>
+                </div>
+
+              <% } %>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- ===================== EDIT MESSAGE FORM (Hidden Until Edit Clicked) ===================== -->
+    <div id="edit-view" style="display: none;">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card border-0 shadow-sm">
+
+            <!-- Edit Form Header -->
+            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+              <h4 class="card-title mb-0">
+                <i class="fas fa-edit me-2"></i> Edit Message from <span id="edit-name-title"></span>
+              </h4>
+              <button id="back-to-list" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> Back to List
+              </button>
+            </div>
+
+            <!-- Edit Form Body -->
+            <div class="card-body">
+              <form id="edit-form" action="" method="POST">
+                <input type="hidden" name="id" id="edit-id">
+
+                <div class="mb-3">
+                  <label class="form-label">Name</label>
+                  <input type="text" class="form-control" name="name" id="edit-name" required>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" name="email" id="edit-email" required>
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Subject</label>
+                  <input type="text" class="form-control" name="subject" id="edit-subject">
+                </div>
+
+                <div class="mb-3">
+                  <label class="form-label">Message</label>
+                  <textarea class="form-control" rows="8" name="message" id="edit-message" required></textarea>
+                </div>
+
+                <div class="text-end">
+                  <button type="button" id="cancel-edit" class="btn btn-secondary me-2">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
-<!-- Message Detail Modal -->
+<!-- ===================== FULL MESSAGE VIEW MODAL ===================== -->
 <div class="modal fade" id="messageModal" tabindex="-1">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -119,13 +205,16 @@
   </div>
 </div>
 
+<!-- ===================== STYLES ===================== -->
 <style>
   .table th { font-weight: 600; }
-  .view-message { padding: 0.35rem 0.5rem; }
+  .view-message, .edit-message { padding: 0.35rem 0.6rem; }
   #modal-message { min-height: 100px; }
 </style>
 
+<!-- ===================== JAVASCRIPT: View, Edit, Cancel ===================== -->
 <script>
+  // Task: Populate and open the View Message Modal
   document.querySelectorAll('.view-message').forEach(btn => {
     btn.addEventListener('click', function() {
       document.getElementById('modal-name').textContent = this.dataset.name;
@@ -135,6 +224,34 @@
       document.getElementById('modal-message').textContent = this.dataset.message;
       document.getElementById('modal-reply').href = `mailto:${this.dataset.email}?subject=Re: ${encodeURIComponent(this.dataset.subject)}`;
     });
+  });
+
+  // Task: Switch from List View to Edit Form View
+  document.querySelectorAll('.edit-message').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.getElementById('edit-id').value = this.dataset.id;
+      document.getElementById('edit-name').value = this.dataset.name;
+      document.getElementById('edit-email').value = this.dataset.email;
+      document.getElementById('edit-subject').value = this.dataset.subject;
+      document.getElementById('edit-message').value = this.dataset.message;
+      document.getElementById('edit-name-title').textContent = this.dataset.name;
+
+      document.getElementById('edit-form').action = `/admin/contact-forms/update/${this.dataset.id}`;
+
+      document.getElementById('list-view').style.display = 'none';
+      document.getElementById('edit-view').style.display = 'block';
+    });
+  });
+
+  // Task: Return to List View
+  document.getElementById('back-to-list').addEventListener('click', () => {
+    document.getElementById('edit-view').style.display = 'none';
+    document.getElementById('list-view').style.display = 'block';
+  });
+
+  document.getElementById('cancel-edit').addEventListener('click', () => {
+    document.getElementById('edit-view').style.display = 'none';
+    document.getElementById('list-view').style.display = 'block';
   });
 </script>
 
